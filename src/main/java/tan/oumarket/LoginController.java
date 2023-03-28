@@ -6,7 +6,7 @@
 package tan.oumarket;
 
 import setting.data;
-import setting.database;
+import setting.JdbcUtils;
 import java.io.IOException;
 import java.net.URL;
 import java.sql.Connection;
@@ -60,13 +60,13 @@ public class LoginController implements Initializable {
     private double x = 0;
     private double y = 0;
 
-    public void login() {
+    public void login() throws SQLException {
         Alert alert;
         
         
         String sql = "SELECT * FROM user WHERE username = ? and password = ?";
 
-        connect = database.connectDb();
+        connect = JdbcUtils.getConn();
 
         try {
             prepare = connect.prepareStatement(sql);

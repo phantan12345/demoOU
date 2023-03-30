@@ -30,6 +30,10 @@ import javafx.scene.input.MouseEvent;
 import javafx.scene.layout.AnchorPane;
 import javafx.stage.Stage;
 import javafx.stage.StageStyle;
+import setting.Info;
+import setting.Singleton;
+import setting.SwitchPage;
+import tan.pojo.user;
 
 /**
  *
@@ -51,80 +55,66 @@ public class LoginController implements Initializable {
 
     @FXML
     private Button close;
+    
+    
+    public String usernameString;
 
     // DATABASE TOOLS
     private Connection connect;
     private PreparedStatement prepare;
     private ResultSet result;
 
-    private double x = 0;
-    private double y = 0;
+
+
+    
+  
 
     public void login() {
-        Alert alert;
-        
-        
-        String sql = "SELECT * FROM user WHERE username = ? and password = ?";
-
+        usernameString = username.getText();
+        String sql = "SELECT * FROM user WHERE SDT = ? and password = ?";
         connect = database.connectDb();
-
+        Info info= new Info();
+        SwitchPage sw;
         try {
             prepare = connect.prepareStatement(sql);
             prepare.setString(1, username.getText());
             prepare.setString(2, password.getText());
-
             result = prepare.executeQuery();
-
             if (username.getText().isEmpty() || password.getText().isEmpty()) {
-                alert = new Alert(AlertType.ERROR);
-                alert.setTitle("Error Message");
-                alert.setHeaderText(null);
-                alert.setContentText("Please fill all blank fields");
-                alert.showAndWait();
+                info.infoBox("Please fill all blank fields", "Error Message", "2");
             } else {
                 if (result.next()) {
+                    // Lấy đối tượng Singleton
+                    Singleton singleton = Singleton.getInstance();
 
-                    data.username = username.getText();
-
-                    alert = new Alert(AlertType.INFORMATION);
-                    alert.setTitle("Information Message");
-                    alert.setHeaderText(null);
-                    alert.setContentText("Successfully Login!");
-                    alert.showAndWait();
-
+                    // Cập nhật giá trị cho biến toàn cục
+                    singleton.setUserID(result.getString("id"));                    
+                    singleton.setName(result.getString("name"));
+                    
+                    if (password.getText().length()>=8){
+                    info.infoBox("Successfully Login!", "Information Message", "1");
                     // TO HIDE YOUR LOGIN FORM
                     loginBtn.getScene().getWindow().hide();
+                        if(result.getBoolean("active")){
+                            // LINK YOUR DASHBOARD ADMIN
+                            Parent root = FXMLLoader.load(getClass().getResource("admin.fxml"));
+                            sw=new SwitchPage(root);
+                        }else{
+                            // LINK YOUR DASHBOARD EMPLOYEE
+                            Parent root = FXMLLoader.load(getClass().getResource("employee.fxml"));
+                            sw=new SwitchPage(root);
+                        }
+                    }else {
+                        info.infoBox("Please change your password when you first log in!", "Information Message", "1");
+                        loginBtn.getScene().getWindow().hide();
+                        // LINK YOUR DASHBOARD
+                        Parent root = FXMLLoader.load(getClass().getResource("changepass.fxml"));
+                        sw=new SwitchPage(root);
 
-                    // LINK YOUR DASHBOARD
-                    Parent root = FXMLLoader.load(getClass().getResource("admin.fxml"));
-
-                    Stage stage = new Stage();
-                    Scene scene = new Scene(root);
-
-                    root.setOnMousePressed((MouseEvent event) -> {
-                        x = event.getSceneX();
-                        y = event.getSceneY();
-                    });
-
-                    root.setOnMouseDragged((MouseEvent event) -> {
-                        stage.setX(event.getScreenX() - x);
-                        stage.setY(event.getScreenY() - y);
-                    });
-
-                    stage.initStyle(StageStyle.TRANSPARENT);
-
-                    stage.setScene(scene);
-                    stage.show();
-
+                    }
                 } else {
                     // IF WRONG USERNAME/PASSWORD YOU'VE ENTERED
-
-                    alert = new Alert(AlertType.ERROR);
-                    alert.setTitle("Error Message");
-                    alert.setHeaderText(null);
-                    alert.setContentText("Wrong Username/Password");
-                    alert.showAndWait();
-
+                    info.infoBox("Wrong Username/Password", "Error Message", "2");
                 }
             }
 
@@ -132,6 +122,8 @@ public class LoginController implements Initializable {
         }
 
     }
+    
+    
 
     @Override
     public void initialize(URL url, ResourceBundle rb) {

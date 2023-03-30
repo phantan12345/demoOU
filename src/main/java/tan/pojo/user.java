@@ -10,18 +10,18 @@ package tan.pojo;
  */
 public class user {
 
-    private int id;
-    private String userName;
+    private String id;
+    private String Name;
     private String passWord;
-    private String hoTen;
+    private String SDT;
     private boolean vaiTro;
 
-    public user(int id, String u, String p,String h) {
-        this.id=id;
-        this.userName=u;
-        this.passWord=p;
-        this.vaiTro=false;
+    public user(String id, String Name, String passWord, String SDT, boolean vaiTro) {
+        this.id = id;
+        this.Name = Name;
+        this.passWord = passWord;
+        this.SDT = SDT;
+        this.vaiTro = vaiTro;
     }
     
-
 }

@@ -1,6 +1,7 @@
 package tan.oumarket;
 
-
+import com.mysql.cj.callback.UsernameCallback;
+import tan.oumarket.LoginController;
 import java.io.IOException;
 import java.net.URL;
 import java.sql.Connection;
@@ -44,6 +45,8 @@ import javafx.scene.input.MouseEvent;
 import javafx.scene.layout.AnchorPane;
 import javafx.stage.Stage;
 import javafx.stage.StageStyle;
+import setting.Singleton;
+import setting.SwitchPage;
 import setting.data;
 import setting.database;
 //import net.sf.jasperreports.engine.JasperCompileManager;
@@ -59,7 +62,7 @@ import setting.database;
  * @author WMarcoMan
  * 
  */
-public class adminController implements Initializable {
+public class employeeController implements Initializable {
 
     @FXML
     private AnchorPane main_form;
@@ -83,7 +86,7 @@ public class adminController implements Initializable {
     private Button order_btn;
 
     @FXML
-    private Button logout;
+    private Button logoutBtn;
 
     @FXML
     private AnchorPane dashboard_form;
@@ -173,7 +176,11 @@ public class adminController implements Initializable {
     private PreparedStatement prepare;
     private Statement statement;
     private ResultSet result;
+    private SwitchPage sw;
 
+    
+
+    
     public void close() {
         System.exit(0);
     }
@@ -182,8 +189,15 @@ public class adminController implements Initializable {
         Stage stage = (Stage) main_form.getScene().getWindow();
         stage.setIconified(true);
     }
+    
+    public void logout() throws IOException{
+        logoutBtn.getScene().getWindow().hide();
+        Parent root = FXMLLoader.load(getClass().getResource("login.fxml"));
+        sw=new SwitchPage(root);
+    }
+    
     public void switchForm(ActionEvent event) {
-
+        
         if (event.getSource() == dashboard_btn) {
             dashboard_form.setVisible(true);
             availableFD_form.setVisible(false);
@@ -192,8 +206,6 @@ public class adminController implements Initializable {
             dashboard_btn.setStyle("-fx-background-color: #3796a7; -fx-text-fill: #fff; -fx-border-width: 0px;");
             avaialbeFD_btn.setStyle("-fx-background-color: transparent; -fx-border-width: 1px; -fx-text-fill: #000;");
             order_btn.setStyle("-fx-background-color: transparent; -fx-border-width: 1px; -fx-text-fill: #000;");
-
-     
 
         } else if (event.getSource() == avaialbeFD_btn) {
             dashboard_form.setVisible(false);
@@ -223,9 +235,8 @@ public class adminController implements Initializable {
     
     @Override
     public void initialize(URL location, ResourceBundle resources) {
-
-       
-        
+        Singleton singleton = Singleton.getInstance();
+        username.setText(" "+singleton.getName());
     }
 
 }

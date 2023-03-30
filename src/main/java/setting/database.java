@@ -19,9 +19,11 @@ public class database {
         try {
             Class.forName("com.mysql.jdbc.Driver");
             // CONNECT YOUR DATABASE
-            Connection connect = DriverManager.getConnection("jdbc:mysql://localhost/makettdb", "root", "phantan0106");
+            Connection connect = DriverManager.getConnection("jdbc:mysql://localhost/makettdb", "root", "P@ssw0rd");
             return connect;
         } catch (ClassNotFoundException | SQLException e) {
+            
+            
         }
 
         return null;

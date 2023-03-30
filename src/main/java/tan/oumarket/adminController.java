@@ -40,13 +40,8 @@ import setting.JdbcUtils;
 import setting.data;
 import tan.pojo.product;
 import tan.sevices.ProductServices;
-//import net.sf.jasperreports.engine.JasperCompileManager;
-//import net.sf.jasperreports.engine.JasperFillManager;
-//import net.sf.jasperreports.engine.JasperPrint;
-//import net.sf.jasperreports.engine.JasperReport;
-//import net.sf.jasperreports.engine.design.JasperDesign;
-//import net.sf.jasperreports.engine.xml.JRXmlLoader;
-//import net.sf.jasperreports.view.JasperViewer;
+
+
 
 /**
  *
@@ -55,11 +50,14 @@ import tan.sevices.ProductServices;
  */
 public class adminController implements Initializable {
 
-    @FXML
-    private TextField availableFD_search;
+    ProductServices product = new ProductServices();
+
 
     @FXML
     private AnchorPane branchFD_form;
+
+    @FXML
+    private AnchorPane employeeFD_form;
 
     @FXML
     private Button branch_btn;
@@ -67,57 +65,7 @@ public class adminController implements Initializable {
     @FXML
     private Button close;
 
-    @FXML
-    private Button employeeFD_addBtn;
-
-    @FXML
-    private Button employeeFD_clearBtn;
-
-    @FXML
-    private TableColumn<?, ?> employeeFD_col_price;
-
-    @FXML
-    private TableColumn<?, ?> employeeFD_col_productID;
-
-    @FXML
-    private TableColumn<?, ?> employeeFD_col_productName;
-
-    @FXML
-    private TableColumn<?, ?> employeeFD_col_status;
-
-    @FXML
-    private TableColumn<?, ?> employeeFD_col_type;
-
-    @FXML
-    private Button employeeFD_deleteBtn;
-
-    @FXML
-    private AnchorPane employeeFD_form;
-
-    @FXML
-    private TextField employeeFD_productID;
-
-    @FXML
-    private TextField employeeFD_productName;
-
-    @FXML
-    private TextField employeeFD_productPrice;
-
-    @FXML
-    private ComboBox<String> employeeFD_productStatus;
-
-    @FXML
-    private ComboBox<String> employeeFD_productType;
-
-    @FXML
-    private TableView<?> employeeFD_tableView;
-
-    @FXML
-    private Button employeeFD_updateBtn;
-
-    @FXML
-    private Button employee_btn;
-
+   
     @FXML
     private Button logout;
 
@@ -128,37 +76,12 @@ public class adminController implements Initializable {
     private Button minimize;
 
     @FXML
-    private Button order_addBtn;
-
+    private ComboBox<String> productStatus;
+   
     @FXML
-    private Label order_balance;
+    private ComboBox<String> productType;
 
-    @FXML
-    private Button order_payBtn;
-
-    @FXML
-    private Button order_receiptBtn;
-
-    @FXML
-    private Button order_removeBtn;
-
-    @FXML
-    private Label order_total;
-
-    @FXML
-    private TableColumn<product, Integer> productFD_col_price;
-
-    @FXML
-    private TableColumn<product, Integer> productFD_col_productID;
-
-    @FXML
-    private TableColumn<product, String> productFD_col_productName;
-
-    @FXML
-    private TableColumn<product, String> productFD_col_status;
-
-    @FXML
-    private TableColumn<product, String> productFD_col_type;
+    
 
     @FXML
     private AnchorPane productFD_form;
@@ -167,7 +90,34 @@ public class adminController implements Initializable {
     private TableView<product> productFD_tableView;
 
     @FXML
+    private TableColumn<?, ?> productFD_col_price;
+
+    @FXML
+    private TableColumn<?, ?> productFD_col_productID;
+
+    @FXML
+    private TableColumn<?, ?> productFD_col_productName;
+
+    @FXML
+    private TableColumn<?, ?> productFD_col_status;
+
+    @FXML
+    private TableColumn<?, ?> productFD_col_type;
+
+    @FXML
+    private TextField txtproductID;
+
+    @FXML
+    private TextField txtproductName;
+
+    @FXML
+    private TextField txtproductprice;
+
+    @FXML
     private Button product_btn;
+
+    @FXML
+    private Button employee_btn;
 
     @FXML
     private Label username;
@@ -177,34 +127,9 @@ public class adminController implements Initializable {
     private Statement statement;
     private ResultSet result;
 
-    private final String[] status = {"Available", "Not Available"};
+    
 
-    public void availableFDStatus() {
-        List<String> listStatus = new ArrayList<>();
-
-        for (String data : status) {
-            listStatus.add(data);
-        }
-
-        ObservableList listData = FXCollections.observableArrayList(listStatus);
-        employeeFD_productStatus.setItems(listData);
-
-    }
-
-    private final String[] categories = {"Meals", "Drinks"};
-
-    public void availableFDType() {
-        List<String> listCat = new ArrayList<>();
-
-        for (String data : categories) {
-            listCat.add(data);
-        }
-
-        ObservableList listData = FXCollections.observableArrayList(listCat);
-        employeeFD_productType.setItems(listData);
-
-    }
-
+      
     public void switchForm(ActionEvent event) {
 
         if (event.getSource() == product_btn) {
@@ -303,7 +228,6 @@ public class adminController implements Initializable {
     }
 
     public void loadProduct(String kw) throws SQLException {
-        ProductServices product = new ProductServices();
         List<product> ds = product.getProducts();
         this.productFD_tableView.getItems().clear();
         this.productFD_tableView.setItems(FXCollections.observableList(ds));
@@ -311,22 +235,99 @@ public class adminController implements Initializable {
     }
 
     public void loadCol() {
-        productFD_col_productID.setCellValueFactory(new PropertyValueFactory<product, Integer>("id"));
-        productFD_col_productName.setCellValueFactory(new PropertyValueFactory<product, String>("name"));
-        productFD_col_type.setCellValueFactory(new PropertyValueFactory<product, String>("type"));
-        productFD_col_price.setCellValueFactory(new PropertyValueFactory<product, Integer>("price"));
-        productFD_col_status.setCellValueFactory(new PropertyValueFactory<product,String>("status"));
+    
+        productFD_col_productID.setCellValueFactory(new PropertyValueFactory<>("id"));
+        productFD_col_productName.setCellValueFactory(new PropertyValueFactory<>("name"));
+        productFD_col_type.setCellValueFactory(new PropertyValueFactory<>("type"));
+        productFD_col_price.setCellValueFactory(new PropertyValueFactory<>("price"));
+        productFD_col_status.setCellValueFactory(new PropertyValueFactory<>("status"));
 
+      
 
     }
 
+    private  String[] status = {"Available", "Not Available"};
+
+    public void availableFDStatus() {
+        List<String> listStatus = new ArrayList<>();
+
+        for (String data : status) {
+            listStatus.add(data);
+        }
+
+        ObservableList listData = FXCollections.observableArrayList(listStatus);
+        productStatus.setItems(listData);
+
+    }
+
+    private  String[] categories = {"Meals", "Drinks"};
+
+    public void availableFDType() {
+        List<String> listCat = new ArrayList<>();
+
+        for (String data : categories) {
+            listCat.add(data);
+        }
+        ObservableList listData = FXCollections.observableArrayList(listCat);
+        productType.setItems(listData);
+
+    }
+
+    public void addProduct(ActionEvent evt) throws SQLException{
+        product p=new product(Integer.parseInt(txtproductID.getText()),txtproductName.getText()
+        ,productType.getSelectionModel().getSelectedItem(),
+        Integer.parseInt(txtproductprice.getText()),productStatus.getSelectionModel().getSelectedItem());
+       if( product.addProduct(p)){
+            this.loadProduct(null);
+            Alert  alert = new Alert(AlertType.INFORMATION);
+        alert.setTitle("Message");
+        alert.setHeaderText(null);
+        alert.setContentText("successfully add");
+        alert.showAndWait();
+       }
+       else{
+        
+        Alert  alert = new Alert(AlertType.ERROR);
+        alert.setTitle("Error Message");
+        alert.setHeaderText(null);
+        alert.setContentText("Please fill all blank fields");
+        alert.showAndWait();
+       }
+      
+    }
+
+    public void deleteProduct(ActionEvent evt){
+        
+    }
+    
+
+    public void select(){
+        product p=productFD_tableView.getSelectionModel().getSelectedItem();
+        int num=productFD_tableView.getSelectionModel().getSelectedIndex();
+        if((num-1)<-1){
+            return;
+        }
+
+        txtproductID.setText(String.valueOf(p.getId()));
+        txtproductName.setText(p.getName());
+        txtproductprice.setText(String.valueOf(p.getPrice()));
+
+
+
+        
+    }
+
+
     @Override
     public void initialize(URL location, ResourceBundle resources) {
- 
-        loadCol();
+        this.availableFDStatus();
+        this.availableFDType();
+        
         try {
-
+           
             this.loadProduct(null);
+            this.loadCol();
+
         } catch (SQLException ex) {
             Logger.getLogger(adminController.class.getName()).log(Level.SEVERE, null, ex);
         }

@@ -102,6 +102,10 @@ public class product {
     
     
     public product(){}
+    
+    public product(int id){
+        this.id=id;
+    }
     public product( int id,String name,String type,int price,String status){
      this.id=id;
      this.name=name;

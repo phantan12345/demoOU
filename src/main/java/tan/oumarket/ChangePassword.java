@@ -6,7 +6,7 @@ package tan.oumarket;
 
 import java.io.IOException;
 import java.sql.Connection;
-import setting.database;
+import setting.JdbcUtils;
 import java.sql.PreparedStatement;
 import java.sql.SQLException;
 import javafx.fxml.FXML;
@@ -39,7 +39,7 @@ public class ChangePassword {
     public void changePass() throws SQLException, IOException{
         Info in= new Info();
         Checkpassword check = new Checkpassword();
-        connect = database.connectDb();
+        connect = JdbcUtils.getConn();
         if (check.validate(password1.getText()))
         {
             if(password1.getText().equals(password2.getText()) )

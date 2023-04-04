@@ -30,12 +30,15 @@ public class ProductServices {
 
             ResultSet rs = stm.executeQuery("SELECT * FROM product");
             while (rs.next()) {
+                
                 product p = new product(
-                        rs.getInt("id"),
-                        rs.getString("name"), rs.getString("type"),
+                        rs.getString("id"),
+                        rs.getString("name"),
+                        rs.getString("type"),
                         rs.getInt("price"),
-                        rs.getString("status"));
+                        rs.getInt("status"));
                 ds.add(p);
+                
             }
         }
         return ds;
@@ -46,14 +49,15 @@ public class ProductServices {
         try (Connection conn = JdbcUtils.getConn()) {
 
             conn.setAutoCommit(false);
-            String sql = "INSERT INTO product(id,name,type,price,status) VALUES(?, ?, ?,?,?)";
+            String sql = "INSERT INTO product(id,name,type,price,status,km_id) VALUES(?, ?, ?,?,?,?)";
             PreparedStatement stm =conn.prepareCall(sql);
 
-            stm.setInt(1, p.getId());
+            stm.setString(1, p.getId());
             stm.setString(2, p.getName());
             stm.setString(3, p.getType());
             stm.setInt(4, p.getPrice());
-            stm.setString(5, p.getStatus());
+            stm.setInt(5, p.getStatus());
+            stm.setString(6, p.getKm_id());
 
             stm.executeUpdate();
            
@@ -70,16 +74,35 @@ public class ProductServices {
        
     }
 
-    public Boolean deleteProduct(product p) throws SQLException{
+    public boolean deleteProduct(String p) throws SQLException{
         try(Connection conn=JdbcUtils.getConn()){
-            String sql="DELETE FORM product where id=?";
-            conn.setAutoCommit(false);
+            String sql="DELETE FROM product where id=?";
             PreparedStatement stm=conn.prepareCall(sql);
 
-            stm.setInt(1, p.getId());
-            stm.executeUpdate();
+            stm.setString(1, p);
+            return stm.executeUpdate() > 0;
         }
-        return true;
+
+    }
+
+    public boolean updateProduct(product p) throws SQLException{
+        try(Connection conn=JdbcUtils.getConn()){
+            String sql="UPDATE product set id=?,name=?,type=?,price=?,status=?,km_id=? where id=?";
+
+            PreparedStatement stm=conn.prepareCall(sql);
+
+            stm.setString(1, p.getId());
+            stm.setString(2, p.getName());
+            stm.setString(3, p.getType());
+            stm.setInt(4, p.getPrice());
+            stm.setInt(5, p.getStatus());
+            stm.setString(6, p.getKm_id());
+            stm.setString(7, p.getId());
+
+
+            return stm.executeUpdate() > 0;
+        }
+
     }
 }
 

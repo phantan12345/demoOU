@@ -13,28 +13,28 @@ public class product {
     /**
      * @return the km_id
      */
-    public int getKm_id() {
+    public String getKm_id() {
         return km_id;
     }
 
     /**
      * @param km_id the km_id to set
      */
-    public void setKm_id(int km_id) {
+    public void setKm_id(String km_id) {
         this.km_id = km_id;
     }
 
     /**
      * @return the id
      */
-    public int getId() {
+    public String getId() {
         return id;
     }
 
     /**
      * @param id the id to set
      */
-    public void setId(int id) {
+    public void setId(String id) {
         this.id = id;
     }
 
@@ -83,36 +83,43 @@ public class product {
     /**
      * @return the status
      */
-    public String getStatus() {
+    public int getStatus() {
         return status;
     }
 
     /**
      * @param status the status to set
      */
-    public void setStatus(String status) {
+    public void setStatus(int status) {
         this.status = status;
     }
-    private int id;
+    private String id;
     private String name;
     private String type;
     private int price;
-    private String status;
-    private int km_id;
+    private int status;
+    private String km_id;
     
     
     public product(){}
     
-    public product(int id){
-        this.id=id;
-    }
-    public product( int id,String name,String type,int price,String status){
+   
+    public product( String id,String name,String type,int price,int status){
      this.id=id;
      this.name=name;
      this.type=type;
      this.price=price;
      this.status=status;
     }
+
+    public product( String id,String name,String type,int price,int status,String km_id){
+        this.id=id;
+        this.name=name;
+        this.type=type;
+        this.price=price;
+        this.status=status;
+        this.km_id=km_id;
+       }
 
 
     

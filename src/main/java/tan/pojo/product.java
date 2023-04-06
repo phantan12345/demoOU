@@ -15,15 +15,27 @@ public class product {
     private int price;
     private int status;
     private String idKM;
+    private String barcode;
     
-    public product(String id, String name, String type, int price, int status) {
+    public product(String id,String barcode, String name, String type, int price, int status) {
         this.id = id;
         this.name = name;
         this.type = type;
         this.price = price;
         this.status = status;
+        this.barcode = barcode;
     }
 
+    public product(String id, String name, String type, int price, int status, String idKM, String barcode) {
+        this.id = id;
+        this.name = name;
+        this.type = type;
+        this.price = price;
+        this.status = status;
+        this.idKM = idKM;
+        this.barcode = barcode;
+    }
+    
     public product() {
         this.name  ="k"   ;
     }
@@ -111,6 +123,20 @@ public class product {
      */
     public void setIdKM(String idKM) {
         this.idKM = idKM;
+    }
+
+    /**
+     * @return the barcode
+     */
+    public String getBarcode() {
+        return barcode;
+    }
+
+    /**
+     * @param barcode the barcode to set
+     */
+    public void setBarcode(String barcode) {
+        this.barcode = barcode;
     }
     
     

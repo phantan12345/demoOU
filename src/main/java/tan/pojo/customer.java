@@ -5,19 +5,21 @@
 package tan.pojo;
 
 import java.util.Date;
+import java.util.UUID;
 
 /**
  *
  * @author admin
  */
 public class customer {
-    private int id;
+    private String id;
     private String fullName;
-    private Date birthDay;
+    private String birthDay;
     private int phoneNumber;
-
-    public customer(int id, String fullName, Date birthDay, int phoneNumber) {
-        this.id = id;
+    {
+       id=UUID.randomUUID().toString();
+    }
+    public customer( String fullName, String birthDay, int phoneNumber) {
         this.fullName = fullName;
         this.birthDay = birthDay;
         this.phoneNumber = phoneNumber;
@@ -35,14 +37,14 @@ public class customer {
     /**
      * @return the id
      */
-    public int getId() {
+    public String getId() {
         return id;
     }
 
     /**
      * @param id the id to set
      */
-    public void setId(int id) {
+    public void setId(String id) {
         this.id = id;
     }
 
@@ -63,14 +65,15 @@ public class customer {
     /**
      * @return the birthDay
      */
-    public Date getBirthDay() {
+    
+    public String getBirthDay() {
         return birthDay;
     }
 
     /**
      * @param birthDay the birthDay to set
      */
-    public void setBirthDay(Date birthDay) {
+    public void setBirthDay(String birthDay) {
         this.birthDay = birthDay;
     }
 

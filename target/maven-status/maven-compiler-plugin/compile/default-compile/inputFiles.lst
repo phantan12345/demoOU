@@ -10,10 +10,11 @@ D:\KiemThu\demoOU\src\main\java\tan\oumarket\ChangePassword.java
 D:\KiemThu\demoOU\src\main\java\setting\Info.java
 D:\KiemThu\demoOU\src\main\java\tan\oumarket\employeeController.java
 D:\KiemThu\demoOU\src\main\java\tan\pojo\product.java
+D:\KiemThu\demoOU\src\main\java\tan\services\BillServices.java
 D:\KiemThu\demoOU\src\main\java\tan\oumarket\App.java
 D:\KiemThu\demoOU\src\main\java\module-info.java
 D:\KiemThu\demoOU\src\main\java\tan\pojo\product_bill.java
-D:\KiemThu\demoOU\src\main\java\tan\pojo\Bill.java
+D:\KiemThu\demoOU\src\main\java\tan\pojo\bill.java
 D:\KiemThu\demoOU\src\main\java\setting\JdbcUtils.java
 D:\KiemThu\demoOU\src\main\java\setting\Singleton.java
 D:\KiemThu\demoOU\src\main\java\tan\services\CustomerServices.java

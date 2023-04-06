@@ -3,6 +3,7 @@
 <?import de.jensd.fx.glyphs.fontawesome.FontAwesomeIcon?>
 <?import java.lang.String?>
 <?import javafx.scene.control.Button?>
+<?import javafx.scene.control.DatePicker?>
 <?import javafx.scene.control.Label?>
 <?import javafx.scene.control.Separator?>
 <?import javafx.scene.control.Spinner?>
@@ -198,7 +199,7 @@
                               </AnchorPane>
                            </children>
                         </AnchorPane>
-                        <AnchorPane fx:id="availableFD_form" layoutX="65.0" layoutY="148.0" prefHeight="555.0" prefWidth="887.0" visible="false" AnchorPane.bottomAnchor="0.0" AnchorPane.leftAnchor="0.0" AnchorPane.rightAnchor="0.0" AnchorPane.topAnchor="0.0">
+                        <AnchorPane fx:id="availableFD_form" layoutX="65.0" layoutY="148.0" prefHeight="555.0" prefWidth="887.0" AnchorPane.bottomAnchor="0.0" AnchorPane.leftAnchor="0.0" AnchorPane.rightAnchor="0.0" AnchorPane.topAnchor="0.0">
                            <children>
                               <AnchorPane layoutX="14.0" layoutY="15.0" prefHeight="525.0" prefWidth="268.0" stylesheets="@dashboardDesign.css">
                                  <styleClass>
@@ -265,7 +266,7 @@
                               <Separator layoutX="290.0" layoutY="14.0" orientation="VERTICAL" prefHeight="544.0" prefWidth="7.0" />
                            </children>
                         </AnchorPane>
-                        <AnchorPane fx:id="order_form" layoutX="114.0" layoutY="79.0" prefHeight="558.0" prefWidth="887.0" AnchorPane.bottomAnchor="0.0" AnchorPane.leftAnchor="0.0" AnchorPane.rightAnchor="0.0" AnchorPane.topAnchor="0.0">
+                        <AnchorPane fx:id="order_form" layoutX="114.0" layoutY="79.0" prefHeight="558.0" prefWidth="887.0" visible="false" AnchorPane.bottomAnchor="0.0" AnchorPane.leftAnchor="0.0" AnchorPane.rightAnchor="0.0" AnchorPane.topAnchor="0.0">
                            <children>
                               <AnchorPane layoutX="14.0" layoutY="14.0" prefHeight="524.0" prefWidth="488.0" stylesheets="@dashboardDesign.css">
                                  <styleClass>
@@ -273,55 +274,37 @@
                                     <String fx:value="shadow" />
                                  </styleClass>
                                  <children>
-                                    <TableView fx:id="order_tableView" layoutX="13.0" layoutY="10.0" prefHeight="504.0" prefWidth="463.0">
+                                    <TableView fx:id="tbv_Cus" layoutX="13.0" layoutY="10.0" prefHeight="504.0" prefWidth="463.0">
                                       <columns>
-                                        <TableColumn fx:id="order_col_productID" prefWidth="75.0" text="Product ID" />
-                                        <TableColumn fx:id="order_col_productName" prefWidth="108.0" text="Product Name" />
-                                          <TableColumn fx:id="order_col_tyoe" prefWidth="90.0" text="Type" />
-                                          <TableColumn fx:id="order_col_price" prefWidth="94.0" text="Price ($)" />
-                                          <TableColumn fx:id="order_col_quantity" prefWidth="94.0" text="Quantity" />
+                                        <TableColumn fx:id="col_FullName" prefWidth="158.0" text="Full Name" />
+                                        <TableColumn fx:id="col_BirthDay" prefWidth="153.0" text="Birth Day" />
+                                          <TableColumn fx:id="col_PhoneNumber" prefWidth="150.0" text="Phone Number" />
                                       </columns>
                                     </TableView>
                                  </children>
                               </AnchorPane>
-                              <AnchorPane layoutX="525.0" layoutY="17.0" prefHeight="524.0" prefWidth="348.0" stylesheets="@dashboardDesign.css">
+                              <AnchorPane layoutX="525.0" layoutY="14.0" prefHeight="524.0" prefWidth="348.0" stylesheets="@dashboardDesign.css">
                                  <styleClass>
                                     <String fx:value="white-bg" />
                                     <String fx:value="shadow" />
                                  </styleClass>
                                  <children>
-                                    <Button fx:id="order_addBtn" layoutX="230.0" layoutY="184.0" mnemonicParsing="false" prefHeight="44.0" prefWidth="98.0" styleClass="add-btn" stylesheets="@dashboardDesign.css" text="Add" />
-                                    <Label layoutX="102.0" layoutY="252.0" text="Total: ">
+                                    <Button fx:id="addCusBtn" layoutX="236.0" layoutY="321.0" mnemonicParsing="false" onAction="#addCus" prefHeight="44.0" prefWidth="98.0" styleClass="add-btn" stylesheets="@dashboardDesign.css" text="Add" />
+                                    <Button fx:id="order_payBtn" layoutX="99.0" layoutY="14.0" mnemonicParsing="false" prefHeight="44.0" prefWidth="165.0" styleClass="add-btn" stylesheets="@dashboardDesign.css" text="Welcome Customer" />
+                                    <TextField fx:id="txtFullName" layoutX="57.0" layoutY="101.0" prefHeight="26.0" prefWidth="249.0" />
+                                    <Label layoutX="44.0" layoutY="72.0" text="Full Name">
                                        <font>
                                           <Font size="14.0" />
                                        </font>
                                     </Label>
-                                    <Label fx:id="order_total" layoutX="152.0" layoutY="252.0" prefHeight="20.0" prefWidth="173.0" text="\$0.0">
-                                       <font>
-                                          <Font name="Arial" size="18.0" />
-                                       </font>
-                                    </Label>
-                                    <Label layoutX="81.0" layoutY="289.0" text="Amount:">
+                                    <Label layoutX="43.0" layoutY="142.0" text="Birth Day">
                                        <font>
                                           <Font size="14.0" />
                                        </font>
                                     </Label>
-                                    <TextField fx:id="order_amount" layoutX="148.0" layoutY="286.0" promptText="\$0.0" styleClass="textfield" stylesheets="@dashboardDesign.css" />
-                                    <Label layoutX="82.0" layoutY="321.0" text="Balance:" AnchorPane.leftAnchor="83.0">
-                                       <font>
-                                          <Font size="14.0" />
-                                       </font>
-                                    </Label>
-                                    <Label fx:id="order_balance" layoutX="152.0" layoutY="320.0" prefHeight="20.0" prefWidth="173.0" text="\$0.0">
-                                       <font>
-                                          <Font name="Arial" size="18.0" />
-                                       </font>
-                                    </Label>
-                                    <Button fx:id="order_payBtn" layoutX="133.0" layoutY="11.0" mnemonicParsing="false" prefHeight="44.0" prefWidth="98.0" styleClass="add-btn" stylesheets="@dashboardDesign.css" />
-                                    <Button fx:id="order_receiptBtn" layoutX="207.0" layoutY="368.0" mnemonicParsing="false" prefHeight="44.0" prefWidth="98.0" styleClass="update-btn" stylesheets="@dashboardDesign.css" text="Receipt" />
-                                    <Button fx:id="order_removeBtn" layoutX="44.0" layoutY="432.0" mnemonicParsing="false" prefHeight="44.0" prefWidth="98.0" styleClass="delete-btn" stylesheets="@dashboardDesign.css" text="Remove" />
-                                    <TextField layoutX="57.0" layoutY="101.0" prefHeight="26.0" prefWidth="249.0" />
-                                    <Label layoutX="44.0" layoutY="55.0" text="Total: ">
+                                    <DatePicker fx:id="dpBirthDay" layoutX="56.0" layoutY="189.0" prefHeight="26.0" prefWidth="249.0" />
+                                    <TextField fx:id="txtPhoneCus" layoutX="56.0" layoutY="264.0" prefHeight="26.0" prefWidth="249.0" />
+                                    <Label layoutX="43.0" layoutY="235.0" text="Phone Number">
                                        <font>
                                           <Font size="14.0" />
                                        </font>

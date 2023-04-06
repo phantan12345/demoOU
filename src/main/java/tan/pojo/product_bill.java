@@ -12,9 +12,6 @@ import java.util.UUID;
  */
 public class product_bill {
 
-
-    
-    
     private String id;
     private String name;
     private String type;
@@ -22,6 +19,7 @@ public class product_bill {
     private int amount;
     private int proPrice;
     private String idProduct;
+    private String idBill;
     {
         id = UUID.randomUUID().toString();
     }
@@ -126,4 +124,19 @@ public class product_bill {
     public void setIdProduct(String idProduct) {
         this.idProduct = idProduct;
     }
+
+    /**
+     * @return the idBill
+     */
+    public String getIdBill() {
+        return idBill;
+    }
+
+    /**
+     * @param idBill the idBill to set
+     */
+    public void setIdBill(String idBill) {
+        this.idBill = idBill;
+    }
+    
 }

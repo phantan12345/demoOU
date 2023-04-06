@@ -8,6 +8,7 @@ import java.sql.PreparedStatement;
 import java.sql.ResultSet;
 import java.sql.SQLException;
 import javafx.collections.ObservableList;
+import javax.crypto.interfaces.PBEKey;
 import setting.JdbcUtils;
 import tan.pojo.product_bill;
 /**
@@ -16,15 +17,15 @@ import tan.pojo.product_bill;
  */
 public class Product_billServices {
     public void saveProduct_bill(ObservableList<product_bill> dspb ) throws SQLException{
-        Connection conn = JdbcUtils.getConn();
-        String sql = "INSERT INTO product_bill(amount,proPrice,idPD) values(?,?,?);";
+        String sql = "INSERT INTO billdetail values(?,?,?,?,?);";
         Connection connect = JdbcUtils.getConn();
         PreparedStatement prepare = connect.prepareStatement(sql);
         for(product_bill pb:dspb){
-                    System.out.println(pb.getName());
-                    prepare.setInt(1, pb.getAmount());
-                    prepare.setInt(2, pb.getProPrice());
-                    prepare.setString(3, pb.getIdProduct());
+                    prepare.setString(1, pb.getId());
+                    prepare.setInt(2, pb.getAmount());
+                    prepare.setInt(3, pb.getProPrice());
+                    prepare.setString(4, pb.getIdProduct());
+                    prepare.setString(5, pb.getIdBill());
                     prepare.executeUpdate();
         }
     }

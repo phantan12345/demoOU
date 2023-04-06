@@ -5,26 +5,32 @@
 package tan.pojo;
 
 import java.time.Instant;
+import java.time.LocalDate;
+import java.time.format.DateTimeFormatter;
 import java.util.Date;
+import java.util.UUID;
 
 /**
  *
  * @author admin
  */
-public class Bill {
-    
+public class bill {
+
     private String id;
-    private Date paymentDate=new Date();
-    private Integer totall;
+    private String payDate;
+    private Integer total;
 
-    public Bill(String id, Integer totall) {
-        this.id = id;
-        this.totall = totall;
+    {
+        setId(UUID.randomUUID().toString());
+        LocalDate currentDate = LocalDate.now();
+        DateTimeFormatter formatter = DateTimeFormatter.ofPattern("dd/MM/yyyy");
+        setPayDate(currentDate.format(formatter));
     }
 
-    public Bill() {
+    public bill(Integer total) {
+        this.total = total;
     }
-    
+
     /**
      * @return the id
      */
@@ -40,31 +46,33 @@ public class Bill {
     }
 
     /**
-     * @return the paymentDate
+     * @return the payDate
      */
-    public Date getPaymentDate() {
-        return paymentDate;
+    public String getPayDate() {
+        return payDate;
     }
 
     /**
-     * @param paymentDate the paymentDate to set
+     * @param payDate the payDate to set
      */
-    public void setPaymentDate(Date paymentDate) {
-        this.paymentDate = paymentDate;
+    public void setPayDate(String payDate) {
+        this.payDate = payDate;
     }
 
     /**
-     * @return the totall
+     * @return the total
      */
-    public Integer getTotall() {
-        return totall;
+    public Integer getTotal() {
+        return total;
     }
 
     /**
-     * @param totall the totall to set
+     * @param total the total to set
      */
-    public void setTotall(Integer totall) {
-        this.totall = totall;
+    public void setTotal(Integer total) {
+        this.total = total;
     }
+
     
+
 }

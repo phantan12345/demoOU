@@ -8,8 +8,10 @@ import java.sql.PreparedStatement;
 import java.sql.ResultSet;
 import java.sql.SQLException;
 import java.sql.Statement;
+import java.text.DecimalFormat;
 import java.time.LocalDate;
 import java.time.ZoneId;
+import java.time.format.DateTimeFormatter;
 import java.util.ArrayList;
 import java.util.Calendar;
 import java.util.Date;
@@ -38,6 +40,7 @@ import javafx.scene.control.Alert.AlertType;
 import javafx.scene.control.Button;
 import javafx.scene.control.ButtonType;
 import javafx.scene.control.ComboBox;
+import javafx.scene.control.DatePicker;
 import javafx.scene.control.Label;
 import javafx.scene.control.Spinner;
 import javafx.scene.control.SpinnerValueFactory;
@@ -54,10 +57,12 @@ import setting.Singleton;
 import setting.SwitchPage;
 import setting.data;
 import setting.JdbcUtils;
+import tan.pojo.bill;
 import tan.pojo.customer;
 import tan.pojo.product;
 import tan.pojo.product_bill;
 import tan.pojo.promotion;
+import tan.services.BillServices;
 import tan.services.CustomerServices;
 import tan.services.ProductServices;
 import tan.services.Product_billServices;
@@ -199,6 +204,30 @@ public class employeeController implements Initializable {
     @FXML
     private Button checkBtn;
 
+    @FXML
+    private Button addCusBtn;
+
+    @FXML
+    private TextField txtFullName;
+
+    @FXML
+    private DatePicker dpBirthDay;
+
+    @FXML
+    private TextField txtPhoneCus;
+
+    @FXML
+    private TableColumn<?, ?> col_FullName;
+
+    @FXML
+    private TableColumn<?, ?> col_BirthDay;
+
+    @FXML
+    private TableColumn<?, ?> col_PhoneNumber;
+
+    @FXML
+    private TableView<customer> tbv_Cus;
+
     private Connection connect;
     private PreparedStatement prepare;
     private Statement statement;
@@ -207,19 +236,27 @@ public class employeeController implements Initializable {
     private int ft = 0;
     private int abe;
     private double percent = 1;
+    private CustomerServices customerServices = new CustomerServices();
 
     private ObservableList<product_bill> dspb = FXCollections.observableArrayList();
-
+    private ObservableList<customer> cusList = FXCollections.observableArrayList();
+    ProductServices pds;
+    DateTimeFormatter formatter = DateTimeFormatter.ofPattern("dd/MM/yyyy");
+    DecimalFormat decimalFormat = new DecimalFormat("#,###₫");
+    product_bill pb;
     public void addBill() throws SQLException {
 
-        ProductServices pds = new ProductServices();
+        pds = new ProductServices();
         product p = pds.getProduct(txtProductID.getText());
-        System.out.print(p.getName());
-        product_bill pb = new product_bill(p.getName(), p.getType(), p.getPrice(), orderQuantity.getValue());
+        pb = new product_bill(p.getName(), p.getType(), p.getPrice(), orderQuantity.getValue());
         pb.setIdProduct(p.getId());
         promotion pro = getPromotion(p.getIdKM());
-        pb.setProPrice((pb.getPrice() - pb.getPrice() * pro.getDiscount() / 100) * pb.getAmount());
-        dspb.add(pb);
+        if (updateAmount(p.getId(),pro.getDiscount())) {
+            dspb.add(pb);
+        }
+        int price=Math.round((pb.getPrice() - pb.getPrice() * pro.getDiscount() / 100) * pb.getAmount());
+        pb.setProPrice(price);
+        this.tbv_Product.refresh();
         loadTableView();
         orderQuantity.getValueFactory().setValue(1);
         txtProductID.setText("");
@@ -238,11 +275,20 @@ public class employeeController implements Initializable {
         orderQuantity.getValueFactory().setValue(1);
         dspb.clear();
         tbv_Product.getItems().clear();
+        ft = 0;
+        fundsTotal();
     }
 
     public void completeBill() throws SQLException {
         Product_billServices pdServices = new Product_billServices();
+        bill b = new bill((int) (ft * percent));
+        BillServices bs = new BillServices();
+        bs.saveBill(b);
+        for (product_bill p : dspb) {
+            p.setIdBill(b.getId());
+        }
         pdServices.saveProduct_bill(dspb);
+        pds.updateAmount(dspb);
         ClearBill();
     }
 
@@ -251,57 +297,70 @@ public class employeeController implements Initializable {
         for (product_bill p : dspb) {
             ft += p.getProPrice();
         }
-        txtFundsTotal.setText(ft + " VND");
-        txtBillAbate.setText(ft * percent + " VND");
+        txtFundsTotal.setText(decimalFormat.format(ft) );
+        txtBillAbate.setText(decimalFormat.format(Math.round(ft*percent)));
     }
 
     public void checkPhone() throws SQLException {
         CustomerServices cs = new CustomerServices();
-        System.err.println(txtPhone.getText());
         customer c = cs.getCus(Integer.parseInt(txtPhone.getText()));
-        System.out.println(c.getBirthDay());
-        //month and day of birth
-        Calendar cal = Calendar.getInstance();
-        cal.setTime(c.getBirthDay());
-        int day = cal.get(Calendar.DAY_OF_MONTH);
-        int month = cal.get(Calendar.MONTH) + 1;
-        //current time
         LocalDate myLocalDate = LocalDate.now();
-        int dayOfMonth = myLocalDate.getDayOfMonth();
-        int monthValue = myLocalDate.getMonthValue();
-        System.out.println(day);
-
-        if (ft > 1000 && day==dayOfMonth && month==monthValue) {
+        DateTimeFormatter formatter = DateTimeFormatter.ofPattern("dd/MM/yyyy");
+        String formattedDateTime = myLocalDate.format(formatter);
+        if (ft > 1000 && formattedDateTime.contains(c.getBirthDay().substring(0, 5))) {
             percent = 0.9;
         }
         fundsTotal();
     }
 
-// 
-//    public boolean updateAmount() throws SQLException {
-//        for (product_bill p : dspb) {
-//            if (p.getIdProduct().equals(txtProductID.getText())) {
-//                p.setAmount(p.getAmount() + orderQuantity.getValue());
-//                return false;
-//            }
-//        }
-//        return true;
-//    }
+    public void addCus() throws SQLException {
+        String birthDay = dpBirthDay.getValue().format(formatter);
+        customer cus = new customer(txtFullName.getText(), birthDay, Integer.parseInt(txtPhoneCus.getText()));
+        customerServices.saveCus(cus);
+        cusList.add(cus);
+        loadTableCus();
+    }
+
+    public boolean updateAmount(String kw,int discount) throws SQLException {
+        if (dspb.size() > 0) {
+            for (product_bill p : dspb) {
+                if (p.getIdProduct().equals(kw)) {
+                    p.setAmount(orderQuantity.getValue() + p.getAmount());
+                    p.setProPrice((p.getPrice() - p.getPrice() * discount / 100) * p.getAmount());
+                    pb.setAmount(p.getAmount());
+                    return false;
+                }
+            }
+            return true;
+        }
+        return true;
+
+    }
+
+    public void loadColCus() {
+        col_FullName.setCellValueFactory(new PropertyValueFactory<>("fullName"));
+        col_BirthDay.setCellValueFactory(new PropertyValueFactory<>("birthDay"));
+        col_PhoneNumber.setCellValueFactory(new PropertyValueFactory<>("phoneNumber"));
+    }
+
+    public void loadTableCus() throws SQLException {
+        this.tbv_Cus.setItems(cusList);
+    }
+
     public void loadCol() {
         col_productName.setCellValueFactory(new PropertyValueFactory<>("name"));
         col_type.setCellValueFactory(new PropertyValueFactory<>("type"));
         col_price.setCellValueFactory(new PropertyValueFactory<>("price"));
         col_amount.setCellValueFactory(new PropertyValueFactory<>("amount"));
         col_promotionPrice.setCellValueFactory(new PropertyValueFactory<>("proPrice"));
-
     }
 
     public void loadTableView() {
         if (dspb.size() > 0) {
-            this.tbv_Product.setItems(dspb);
-        }
-        //System.out.println(dspb.get(0).getAmount());
+//            tbv_Product.getItems().clear();
+            tbv_Product.setItems(dspb);
 
+        }
     }
 
     //Get promotion
@@ -389,7 +448,13 @@ public class employeeController implements Initializable {
         username.setText(" " + singleton.getName());
         orderSpinner();
         loadCol();
-
+        loadColCus();
+        try {
+            cusList = FXCollections.observableList(customerServices.loadCus());
+            loadTableCus();
+        } catch (SQLException ex) {
+            Logger.getLogger(employeeController.class.getName()).log(Level.SEVERE, null, ex);
+        }
     }
 
 }

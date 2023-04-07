@@ -1,0 +1,58 @@
+-- MySQL dump 10.13  Distrib 8.0.32, for Win64 (x86_64)
+--
+-- Host: localhost    Database: makettdb
+-- ------------------------------------------------------
+-- Server version	8.0.32
+
+/*!40101 SET @OLD_CHARACTER_SET_CLIENT=@@CHARACTER_SET_CLIENT */;
+/*!40101 SET @OLD_CHARACTER_SET_RESULTS=@@CHARACTER_SET_RESULTS */;
+/*!40101 SET @OLD_COLLATION_CONNECTION=@@COLLATION_CONNECTION */;
+/*!50503 SET NAMES utf8 */;
+/*!40103 SET @OLD_TIME_ZONE=@@TIME_ZONE */;
+/*!40103 SET TIME_ZONE='+00:00' */;
+/*!40014 SET @OLD_UNIQUE_CHECKS=@@UNIQUE_CHECKS, UNIQUE_CHECKS=0 */;
+/*!40014 SET @OLD_FOREIGN_KEY_CHECKS=@@FOREIGN_KEY_CHECKS, FOREIGN_KEY_CHECKS=0 */;
+/*!40101 SET @OLD_SQL_MODE=@@SQL_MODE, SQL_MODE='NO_AUTO_VALUE_ON_ZERO' */;
+/*!40111 SET @OLD_SQL_NOTES=@@SQL_NOTES, SQL_NOTES=0 */;
+
+--
+-- Table structure for table `bill`
+--
+
+DROP TABLE IF EXISTS `bill`;
+/*!40101 SET @saved_cs_client     = @@character_set_client */;
+/*!50503 SET character_set_client = utf8mb4 */;
+CREATE TABLE `bill` (
+  `id` varchar(50) COLLATE utf8mb4_unicode_ci NOT NULL,
+  `datePay` varchar(50) COLLATE utf8mb4_unicode_ci DEFAULT NULL,
+  `total` int DEFAULT NULL,
+  `idEm` varchar(50) COLLATE utf8mb4_unicode_ci DEFAULT NULL,
+  `idCus` varchar(50) COLLATE utf8mb4_unicode_ci DEFAULT NULL,
+  PRIMARY KEY (`id`),
+  KEY `idEm` (`idEm`),
+  KEY `idCus` (`idCus`),
+  CONSTRAINT `bill_ibfk_1` FOREIGN KEY (`idEm`) REFERENCES `employee` (`id`),
+  CONSTRAINT `bill_ibfk_2` FOREIGN KEY (`idCus`) REFERENCES `customer` (`id`)
+) ENGINE=InnoDB DEFAULT CHARSET=utf8mb4 COLLATE=utf8mb4_unicode_ci;
+/*!40101 SET character_set_client = @saved_cs_client */;
+
+--
+-- Dumping data for table `bill`
+--
+
+LOCK TABLES `bill` WRITE;
+/*!40000 ALTER TABLE `bill` DISABLE KEYS */;
+INSERT INTO `bill` VALUES ('54ba764a-292a-4a5b-bee9-4ad89473ab56','06/04/2023',10000,NULL,NULL),('6cb28a5d-fcd7-4d53-8092-b46a72746394','06/04/2023',10000,NULL,NULL),('79e6f525-11fe-4da8-ae5d-773a55e86664','06/04/2023',10000,NULL,NULL),('ae668833-ab73-4258-8575-aa2811a3f4e7','06/04/2023',10000,NULL,NULL),('af93db00-d6c4-41e9-9940-6823f52b680b','06/04/2023',10000,NULL,NULL),('bbb1bb88-eca7-4775-8ccf-2bae18a0d9e0','06/04/2023',10000,NULL,NULL),('f56bdb35-8052-4a03-91bb-490b726d05eb','06/04/2023',1044000,NULL,NULL);
+/*!40000 ALTER TABLE `bill` ENABLE KEYS */;
+UNLOCK TABLES;
+/*!40103 SET TIME_ZONE=@OLD_TIME_ZONE */;
+
+/*!40101 SET SQL_MODE=@OLD_SQL_MODE */;
+/*!40014 SET FOREIGN_KEY_CHECKS=@OLD_FOREIGN_KEY_CHECKS */;
+/*!40014 SET UNIQUE_CHECKS=@OLD_UNIQUE_CHECKS */;
+/*!40101 SET CHARACTER_SET_CLIENT=@OLD_CHARACTER_SET_CLIENT */;
+/*!40101 SET CHARACTER_SET_RESULTS=@OLD_CHARACTER_SET_RESULTS */;
+/*!40101 SET COLLATION_CONNECTION=@OLD_COLLATION_CONNECTION */;
+/*!40111 SET SQL_NOTES=@OLD_SQL_NOTES */;
+
+-- Dump completed on 2023-04-06 15:55:02

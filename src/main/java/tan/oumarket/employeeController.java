@@ -375,7 +375,9 @@ public class employeeController implements Initializable {
         if (rs.next()) {
             promotion p = new promotion(
                     rs.getString("id"),
-                    rs.getInt("discount")
+                    rs.getInt("discount"),
+                    rs.getDate("a"),
+                    rs.getDate("2")
             );
             return p;
         };

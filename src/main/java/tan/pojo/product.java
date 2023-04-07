@@ -4,18 +4,49 @@
  */
 package tan.pojo;
 
+import java.util.UUID;
+
 /**
  *
  * @author admin
  */
 public class product {
     private String id;
+    {
+        id = UUID.randomUUID().toString();
+    }
     private String name;
     private String type;
     private int price;
     private int status;
     private String idKM;
     private String barcode;
+    
+     public product( String id,String name,String type,int price,int status){
+     this.id=id;
+     this.name=name;
+     this.type=type;
+     this.price=price;
+     this.status=status;
+    }
+
+    public product( String id,String name,String type,int price,int status,String km_id){
+        this.id=id;
+        this.name=name;
+        this.type=type;
+        this.price=price;
+        this.status=status;
+        this.idKM=km_id;
+       }
+       public product( String name,String type,int price,int status,String km_id,String bar){
+        this.id=id;
+        this.name=name;
+        this.type=type;
+        this.price=price;
+        this.status=status;
+        this.idKM=km_id;
+        this.barcode=bar;
+       }
     
     public product(String id,String barcode, String name, String type, int price, int status) {
         this.id = id;

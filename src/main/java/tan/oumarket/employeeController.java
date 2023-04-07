@@ -250,17 +250,20 @@ public class employeeController implements Initializable {
         product p = pds.getProduct(txtProductID.getText());
         pb = new product_bill(p.getName(), p.getType(), p.getPrice(), orderQuantity.getValue());
         pb.setIdProduct(p.getId());
-        promotion pro = getPromotion(p.getIdKM());
-        if (updateAmount(p.getId(),pro.getDiscount())) {
+        System.out.println(p.getIdKM());
+        int pro = getPromotion(p.getIdKM());
+        
+        if (updateAmount(p.getId(),pro)) {
             dspb.add(pb);
         }
-        int price=Math.round((pb.getPrice() - pb.getPrice() * pro.getDiscount() / 100) * pb.getAmount());
+        int price=Math.round((pb.getPrice() - pb.getPrice() * pro / 100) * pb.getAmount());
         pb.setProPrice(price);
         this.tbv_Product.refresh();
         loadTableView();
         orderQuantity.getValueFactory().setValue(1);
         txtProductID.setText("");
         fundsTotal();
+
 
     }
 
@@ -364,24 +367,27 @@ public class employeeController implements Initializable {
     }
 
     //Get promotion
-    public promotion getPromotion(String id) throws SQLException {
+    public int getPromotion(String id) throws SQLException {
         connect = JdbcUtils.getConn();
-        String sql = "SELECT * FROM promotion WHERE id = ?";
+        String sql = "SELECT * FROM promotion WHERE id = ? and active=?";
         Connection connect = JdbcUtils.getConn();
         PreparedStatement prepare = connect.prepareStatement(sql);
         prepare.setString(1, id);
+        prepare.setInt(2, 1);
         ResultSet rs = prepare.executeQuery();
-        promotion c = new promotion();
         if (rs.next()) {
             promotion p = new promotion(
                     rs.getString("id"),
                     rs.getInt("discount"),
-                    rs.getDate("a"),
-                    rs.getDate("2")
+                    rs.getDate("startDate"),
+                    rs.getDate("endDate"),
+                    rs.getInt("active")
             );
-            return p;
-        };
-        return c;
+           
+            return  p.getDiscount();
+            
+        }
+        return 0;
     }
 
     //    Set spinner

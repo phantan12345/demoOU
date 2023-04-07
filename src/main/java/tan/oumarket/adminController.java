@@ -8,6 +8,9 @@ import java.sql.PreparedStatement;
 import java.sql.ResultSet;
 import java.sql.SQLException;
 import java.sql.Statement;
+import java.text.ParseException;
+import java.time.LocalDate;
+import java.time.format.DateTimeFormatter;
 import java.util.ArrayList;
 import java.util.List;
 import java.util.Optional;
@@ -376,6 +379,7 @@ public class adminController implements Initializable {
 
     public void loadProduct(String kw) throws SQLException {
         List<product> ds = product.getProducts();
+      
         this.productFD_tableView.getItems().clear();
         this.productFD_tableView.setItems(FXCollections.observableList(ds));
     }
@@ -388,6 +392,9 @@ public class adminController implements Initializable {
         branchFD_col_productID.setCellValueFactory(new PropertyValueFactory<>("id"));
         branchFD_col_productName.setCellValueFactory(new PropertyValueFactory<>("name"));
         branchFD_col_productAddress.setCellValueFactory(new PropertyValueFactory<>("address"));
+
+
+       
 
     }
 
@@ -404,10 +411,14 @@ public class adminController implements Initializable {
 
     }
 
-    public void loadPromotion(String kw) throws SQLException {
+    public void loadPromotion(String kw) throws ParseException, SQLException  {
         List<promotion> listpromottion = promo.getPromotion();
+        
         this.productFD_tableView.getItems().clear();
         this.promotionFD_tableview.setItems(FXCollections.observableList(listpromottion));
+
+        
+       
 
     }
 
@@ -702,10 +713,10 @@ public class adminController implements Initializable {
 
     // promotion
 
-    public void addPromotion(ActionEvent evt) throws SQLException {
+    public void addPromotion(ActionEvent evt) throws SQLException, ParseException {
         Date start = Date.valueOf(this.promotionFD_dtStartdate.getValue());
         Date end = Date.valueOf(this.promotionFD_dtEnddate.getValue());
-        promotion b = new promotion(Integer.parseInt(promotionFD_txtDiscount.getText()),start, end);
+        promotion b = new promotion(Integer.parseInt(promotionFD_txtDiscount.getText()),start, end,1);
 
         if (promo.addPromotion(b)) {
             this.loadPromotion(null);
@@ -725,7 +736,7 @@ public class adminController implements Initializable {
 
     }
 
-    public void deletePromotion(ActionEvent evt) throws SQLException {
+    public void deletePromotion(ActionEvent evt) throws SQLException, ParseException {
         if (promo.deletePromotion((promotionFD_tableview.getSelectionModel().getSelectedItem()).getId())) {
             this.loadPromotion(null);
             Alert alert = new Alert(AlertType.INFORMATION);
@@ -767,29 +778,48 @@ public class adminController implements Initializable {
 
     }
 
+    public void checkday(List<promotion> aList) throws SQLException{
+        LocalDate myLocalDate = LocalDate.now();
+        DateTimeFormatter formatter = DateTimeFormatter.ofPattern("yyyy/MM/dd");
+        String formattedDateTime = myLocalDate.format(formatter);
+        for (promotion promotion : aList) {
+            promo.checkday(formattedDateTime);
+        }
+    }
+
+
+
+
     @Override
     public void initialize(URL location, ResourceBundle resources) {
         this.availableFDType();
 
+
         try {
             List<promotion> listpromottion = promo.getPromotion();
             this.cbPromotion.setItems(FXCollections.observableList(listpromottion));
-
             List<branch> ds = branch.getBranchs();
             this.employee_cbbranch.setItems(FXCollections.observableList(ds));
 
             // promotion
             loadCol_promotion();
             loadPromotion(null);
+           
 
             this.loadProduct(null);
             this.loadBranch(null);
+
+
             loadEmoploye(null);
             this.loadCol();
-
+            
+            checkday(listpromottion);
         } catch (SQLException ex) {
             Logger.getLogger(adminController.class.getName()).log(Level.SEVERE, null, ex);
-        }
+        } catch (ParseException e) {
+            // TODO Auto-generated catch block
+            e.printStackTrace();
+        } 
 
     }
 

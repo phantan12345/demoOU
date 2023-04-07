@@ -9,6 +9,7 @@ import setting.data;
 import setting.JdbcUtils;
 import java.io.IOException;
 import java.net.URL;
+import java.security.interfaces.RSAKey;
 import java.sql.Connection;
 import java.sql.PreparedStatement;
 import java.sql.ResultSet;
@@ -33,7 +34,9 @@ import javafx.stage.StageStyle;
 import setting.Info;
 import setting.Singleton;
 import setting.SwitchPage;
+import tan.pojo.employee;
 import tan.pojo.user;
+import tan.services.*;;
 
 /**
  *
@@ -55,78 +58,62 @@ public class LoginController implements Initializable {
 
     @FXML
     private Button close;
-    
-    
+
     public String usernameString;
 
     // DATABASE TOOLS
     private Connection connect;
     private PreparedStatement prepare;
     private ResultSet result;
-
-
-
-    
-  
-
-    public void login() throws SQLException {
+    employeeServices em = new employeeServices();
+    employee e;
+    public void login() throws SQLException, IOException {
         usernameString = username.getText();
-        String sql = "SELECT * FROM user WHERE SDT = ? and password = ?";
-        connect = JdbcUtils.getConn();
-        Info info= new Info();
+        Info info = new Info();
         SwitchPage sw;
-        try {
-            prepare = connect.prepareStatement(sql);
-            prepare.setString(1, username.getText());
-            prepare.setString(2, password.getText());
-            result = prepare.executeQuery();
-            if (username.getText().isEmpty() || password.getText().isEmpty()) {
-                info.infoBox("Please fill all blank fields", "Error Message", "2");
-            } else {
-                if (result.next()) {
-                    // Lấy đối tượng Singleton
-                    Singleton singleton = Singleton.getInstance();
-
-                    // Cập nhật giá trị cho biến toàn cục
-                    singleton.setUserID(result.getString("id"));                    
-                    singleton.setName(result.getString("name"));
-                    
-                    if (password.getText().length()>=8){
+        e=em.checkEmployee(usernameString, password.getText());
+        if (username.getText().isEmpty() || password.getText().isEmpty()) {
+            info.infoBox("Please fill all blank fields", "Error Message", "2");
+        } else {
+            System.err.println(e.getName());
+            if (e!=null) {
+                // Lấy đối tượng Singleton
+                Singleton singleton = Singleton.getInstance();
+                // Cập nhật giá trị cho biến toàn cục
+                singleton.setUserID(e.getId());
+                singleton.setName(e.getName());
+                if (password.getText().length() >= 8) {
                     info.infoBox("Successfully Login!", "Information Message", "1");
                     // TO HIDE YOUR LOGIN FORM
                     loginBtn.getScene().getWindow().hide();
-                        if(result.getBoolean("active")){
-                            // LINK YOUR DASHBOARD ADMIN
-                            Parent root = FXMLLoader.load(getClass().getResource("admin.fxml"));
-                            sw=new SwitchPage(root);
-                        }else{
-                            // LINK YOUR DASHBOARD EMPLOYEE
-                            Parent root = FXMLLoader.load(getClass().getResource("employee.fxml"));
-                            sw=new SwitchPage(root);
-                        }
-                    }else {
-                        info.infoBox("Please change your password when you first log in!", "Information Message", "1");
-                        loginBtn.getScene().getWindow().hide();
-                        // LINK YOUR DASHBOARD
-                        Parent root = FXMLLoader.load(getClass().getResource("changepass.fxml"));
-                        sw=new SwitchPage(root);
-
+                    if (e.getActive() == 0) {
+                        // LINK YOUR DASHBOARD ADMIN
+                        Parent root = FXMLLoader.load(getClass().getResource("admin.fxml"));
+                        sw = new SwitchPage(root);
+                    } else {
+                        // LINK YOUR DASHBOARD EMPLOYEE
+                        Parent root = FXMLLoader.load(getClass().getResource("employee.fxml"));
+                        sw = new SwitchPage(root);
                     }
                 } else {
-                    // IF WRONG USERNAME/PASSWORD YOU'VE ENTERED
-                    info.infoBox("Wrong Username/Password", "Error Message", "2");
+                    info.infoBox("Please change your password when you first log in!", "Information Message", "1");
+                    loginBtn.getScene().getWindow().hide();
+                    // LINK YOUR DASHBOARD
+                    Parent root = FXMLLoader.load(getClass().getResource("changepass.fxml"));
+                    sw = new SwitchPage(root);
+
                 }
+            } else {
+                // IF WRONG USERNAME/PASSWORD YOU'VE ENTERED
+                info.infoBox("Wrong Username/Password", "Error Message", "2");
             }
-
-        } catch (IOException | SQLException e) {
         }
-
     }
     
-    
+  
 
     @Override
-    public void initialize(URL url, ResourceBundle rb) {
+public void initialize(URL url, ResourceBundle rb) {
         // TODO
     }
 

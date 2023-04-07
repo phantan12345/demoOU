@@ -18,7 +18,9 @@ import tan.pojo.employee;
 import tan.services.branchServices;
 
 public class employeeServices {
-public branchServices branch=new branchServices();
+
+    public branchServices branch = new branchServices();
+
     public List<employee> getEmployees() throws SQLException {
         List<employee> ds = new ArrayList<>();
         try (Connection conn = JdbcUtils.getConn()) {
@@ -33,9 +35,9 @@ public branchServices branch=new branchServices();
                         rs.getString("idBr"),
                         rs.getInt("Active"));
                 ds.add(b);
-                
+
                 b.setNamebr(branch.getBranch(b.getIdbr()).getAddress());
-                
+
             }
         }
 
@@ -47,16 +49,15 @@ public branchServices branch=new branchServices();
 
             conn.setAutoCommit(false);
             String sql = "INSERT INTO employee(id,fullName,phoneNumber,active,idBr) VALUES(?,?,?,?,?)";
-            PreparedStatement stm =conn.prepareCall(sql);
+            PreparedStatement stm = conn.prepareCall(sql);
             stm.setString(1, b.getId());
             stm.setString(2, b.getName());
             stm.setString(3, b.getPhone());
             stm.setInt(4, b.getActive());
             stm.setString(5, b.getIdbr());
-           
+
             stm.executeUpdate();
 
-            
             try {
                 conn.commit();
                 return true;
@@ -66,22 +67,21 @@ public branchServices branch=new branchServices();
         }
     }
 
-
-    public boolean deleteEmployee(String p) throws SQLException{
-        try(Connection conn=JdbcUtils.getConn()){
-            String sql="DELETE FROM employee where id=?";
-            PreparedStatement stm=conn.prepareCall(sql);
+    public boolean deleteEmployee(String p) throws SQLException {
+        try (Connection conn = JdbcUtils.getConn()) {
+            String sql = "DELETE FROM employee where id=?";
+            PreparedStatement stm = conn.prepareCall(sql);
 
             stm.setString(1, p);
             return stm.executeUpdate() > 0;
         }
     }
 
-    public boolean updateEmployee(employee p) throws SQLException{
-        try(Connection conn=JdbcUtils.getConn()){
-            String sql="UPDATE branch set   fullName=?,phoneNumber=?,idBr=? where id=?";
+    public boolean updateEmployee(employee p) throws SQLException {
+        try (Connection conn = JdbcUtils.getConn()) {
+            String sql = "UPDATE branch set fullName=?,phoneNumber=?,idBr=? where id=?";
 
-            PreparedStatement stm=conn.prepareCall(sql);
+            PreparedStatement stm = conn.prepareCall(sql);
 
             stm.setString(1, p.getName());
             stm.setString(2, p.getPhone());
@@ -90,7 +90,31 @@ public branchServices branch=new branchServices();
 
             return stm.executeUpdate() > 0;
         }
-
     }
 
+    public employee checkEmployee(String phone, String password) throws SQLException {
+        employee c=null;
+        try (Connection conn = JdbcUtils.getConn()) {
+            String sql = "SELECT * FROM employee WHERE phoneNumber = ? and password = ?";
+            PreparedStatement stm = conn.prepareCall(sql);
+            stm.setString(1, phone);
+            stm.setString(2, password);
+            ResultSet rs = stm.executeQuery();
+
+            if (rs.next()) {
+                employee e = new employee(rs.getString("id"),
+                        rs.getString("fullName"),
+                        rs.getString("phoneNumber"),
+                        rs.getString("idBr"),
+                        rs.getInt("active"));
+                return e;
+            };
+            return c;
+        }
+
+    }
+    
 }
+
+    
+

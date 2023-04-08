@@ -1,5 +1,10 @@
 package tan.pojo;
 
+<<<<<<< HEAD
+=======
+import java.util.UUID;
+
+>>>>>>> son
 public class branch {
 
     /**
@@ -40,7 +45,14 @@ public class branch {
     public void setName(String name) {
         this.name = name;
     }
+<<<<<<< HEAD
     private String id;
+=======
+    private String id;   
+{
+    id = UUID.randomUUID().toString();
+}
+>>>>>>> son
     private String name;
     private String address;
 
@@ -54,10 +66,23 @@ public class branch {
         this.address=address;
     }
      public branch(String name,String address){
+<<<<<<< HEAD
+=======
+        this.id=id;
+>>>>>>> son
         this.name=name;
         this.address=address;
     }
 
+<<<<<<< HEAD
+=======
+    @Override
+    public String toString() {
+        // TODO Auto-generated method stub
+        return this.getAddress();
+    }
+
+>>>>>>> son
 
 
 

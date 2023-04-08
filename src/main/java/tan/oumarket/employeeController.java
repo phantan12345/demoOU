@@ -52,6 +52,7 @@ import javafx.scene.input.MouseEvent;
 import javafx.scene.layout.AnchorPane;
 import javafx.stage.Stage;
 import javafx.stage.StageStyle;
+import setting.CheckText;
 import setting.Info;
 import setting.Singleton;
 import setting.SwitchPage;
@@ -243,20 +244,26 @@ public class employeeController implements Initializable {
     ProductServices pds;
     DateTimeFormatter formatter = DateTimeFormatter.ofPattern("dd/MM/yyyy");
     DecimalFormat decimalFormat = new DecimalFormat("#,###₫");
+    CheckText checkText = new CheckText();
+    Info info = new Info();
     product_bill pb;
-    public void addBill() throws SQLException {
+    String idcus=null;
 
+    public void addBill() throws SQLException {
+        String code = txtProductID.getText();
+        ProductServices bProductServices=new ProductServices();
+        if (checkText.checkEmpty(code)||bProductServices.checkBarcode(code)) {
+            return;
+        }
         pds = new ProductServices();
         product p = pds.getProduct(txtProductID.getText());
         pb = new product_bill(p.getName(), p.getType(), p.getPrice(), orderQuantity.getValue());
         pb.setIdProduct(p.getId());
-        System.out.println(p.getIdKM());
-        int pro = getPromotion(p.getIdKM());
-        
-        if (updateAmount(p.getId(),pro)) {
+        promotion pro = getPromotion(p.getIdKM());
+        if (updateAmount(p.getId(), pro.getDiscount())) {
             dspb.add(pb);
         }
-        int price=Math.round((pb.getPrice() - pb.getPrice() * pro / 100) * pb.getAmount());
+        int price = Math.round((pb.getPrice() - pb.getPrice() * pro.getDiscount() / 100) * pb.getAmount());
         pb.setProPrice(price);
         this.tbv_Product.refresh();
         loadTableView();
@@ -264,35 +271,45 @@ public class employeeController implements Initializable {
         txtProductID.setText("");
         fundsTotal();
 
-
     }
 
     public void deleteBill() throws SQLException {
         product_bill pb = tbv_Product.getSelectionModel().getSelectedItem();
         dspb.remove(pb);
         loadTableView();
+        fundsTotal();
     }
 
     public void ClearBill() throws SQLException {
+        if (info.conFir()) {
+            return;
+        }
+        Clear();
+    }
+    public void Clear(){
         txtProductID.setText("");
         orderQuantity.getValueFactory().setValue(1);
         dspb.clear();
         tbv_Product.getItems().clear();
         ft = 0;
+        txtPhone.setText("");
         fundsTotal();
     }
 
     public void completeBill() throws SQLException {
+        if(info.conFir())
+            return;
         Product_billServices pdServices = new Product_billServices();
         bill b = new bill((int) (ft * percent));
         BillServices bs = new BillServices();
-        bs.saveBill(b);
+        System.out.println(idcus);
+        bs.saveBill(b,idcus);
         for (product_bill p : dspb) {
             p.setIdBill(b.getId());
         }
         pdServices.saveProduct_bill(dspb);
         pds.updateAmount(dspb);
-        ClearBill();
+        Clear();
     }
 
     public void fundsTotal() {
@@ -300,31 +317,43 @@ public class employeeController implements Initializable {
         for (product_bill p : dspb) {
             ft += p.getProPrice();
         }
-        txtFundsTotal.setText(decimalFormat.format(ft) );
-        txtBillAbate.setText(decimalFormat.format(Math.round(ft*percent)));
+        txtFundsTotal.setText(decimalFormat.format(ft));
+        txtBillAbate.setText(decimalFormat.format(Math.round(ft * percent)));
     }
 
     public void checkPhone() throws SQLException {
+        String phone = txtPhone.getText();
+        if (checkText.checkEmpty(phone) || checkText.checkPhone(phone)) {
+            return;
+        }
         CustomerServices cs = new CustomerServices();
-        customer c = cs.getCus(Integer.parseInt(txtPhone.getText()));
+        customer c = cs.getCus(phone);
+        if(c.getPhoneNumber()!=null)
+            idcus=c.getId();
         LocalDate myLocalDate = LocalDate.now();
         DateTimeFormatter formatter = DateTimeFormatter.ofPattern("dd/MM/yyyy");
         String formattedDateTime = myLocalDate.format(formatter);
-        if (ft > 1000 && formattedDateTime.contains(c.getBirthDay().substring(0, 5))) {
+        if (c != null && ft > 1000000 && formattedDateTime.contains(c.getBirthDay().substring(0, 5))) {
             percent = 0.9;
         }
         fundsTotal();
     }
 
     public void addCus() throws SQLException {
+        String name = txtFullName.getText();
         String birthDay = dpBirthDay.getValue().format(formatter);
-        customer cus = new customer(txtFullName.getText(), birthDay, Integer.parseInt(txtPhoneCus.getText()));
+        String phone = txtPhoneCus.getText();
+        if (checkText.checkEmpty(birthDay) || checkText.checkEmpty(name)
+                || checkText.checkEmpty(phone) || checkText.checkPhone(phone) || customerServices.checkCus(phone)) {
+            return;
+        }
+        customer cus = new customer(name, birthDay, phone);
         customerServices.saveCus(cus);
         cusList.add(cus);
         loadTableCus();
     }
 
-    public boolean updateAmount(String kw,int discount) throws SQLException {
+    public boolean updateAmount(String kw, int discount) throws SQLException {
         if (dspb.size() > 0) {
             for (product_bill p : dspb) {
                 if (p.getIdProduct().equals(kw)) {
@@ -367,27 +396,24 @@ public class employeeController implements Initializable {
     }
 
     //Get promotion
-    public int getPromotion(String id) throws SQLException {
+    public promotion getPromotion(String id) throws SQLException {
         connect = JdbcUtils.getConn();
-        String sql = "SELECT * FROM promotion WHERE id = ? and active=?";
+        String sql = "SELECT * FROM promotion WHERE id = ?";
         Connection connect = JdbcUtils.getConn();
         PreparedStatement prepare = connect.prepareStatement(sql);
         prepare.setString(1, id);
-        prepare.setInt(2, 1);
         ResultSet rs = prepare.executeQuery();
+        promotion c = new promotion();
         if (rs.next()) {
             promotion p = new promotion(
                     rs.getString("id"),
                     rs.getInt("discount"),
-                    rs.getDate("startDate"),
-                    rs.getDate("endDate"),
-                    rs.getInt("active")
+                    rs.getDate("a"),
+                    rs.getDate("2")
             );
-           
-            return  p.getDiscount();
-            
-        }
-        return 0;
+            return p;
+        };
+        return c;
     }
 
     //    Set spinner
@@ -463,6 +489,10 @@ public class employeeController implements Initializable {
         } catch (SQLException ex) {
             Logger.getLogger(employeeController.class.getName()).log(Level.SEVERE, null, ex);
         }
+        txtBillAbate.setEditable(false);
+        txtBillAbate.setFocusTraversable(false);
+        txtFundsTotal.setEditable(false);
+        txtFundsTotal.setFocusTraversable(false);
     }
 
 }

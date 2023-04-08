@@ -10,7 +10,6 @@ import java.sql.PreparedStatement;
 import java.sql.ResultSet;
 
 import setting.JdbcUtils;
-import tan.pojo.product;
 import tan.pojo.promotion;
 
 public class promotionServices {
@@ -26,9 +25,7 @@ public class promotionServices {
                 promotion p = new promotion(rs.getString("id"), 
                 rs.getInt("discount")
                 ,rs.getDate("startDate"), 
-                rs.getDate("endDate"),
-                rs.getInt("active")    
-            );
+                rs.getDate("endDate"));
                 ds.add(p);
 
             }
@@ -47,10 +44,8 @@ public class promotionServices {
 
             promotion c=new promotion(rs.getString("id"), 
             rs.getInt("discount"),
-             rs.getDate("startDate"), 
-             rs.getDate("endDate"),
-            rs.getInt("active")     
-        );
+             rs.getDate("star"), 
+             rs.getDate("end"));
 
             return c;
         }
@@ -64,14 +59,13 @@ public class promotionServices {
         try (Connection conn = JdbcUtils.getConn()) {
 
             conn.setAutoCommit(false);
-            String sql = "INSERT INTO promotion(id,discount,startDate,endDate,active) VALUES(?, ?, ?,?,?)";
+            String sql = "INSERT INTO promotion(id,discount,startDate,endDate) VALUES(?, ?, ?,?)";
             PreparedStatement stm =conn.prepareCall(sql);
 
             stm.setString(1, p.getId());
             stm.setInt(2, p.getDiscount());
             stm.setDate(3, p.getStar());
             stm.setDate(4, p.getEnd());
-            stm.setInt(5, p.getAative());
 
             stm.executeUpdate();
            
@@ -99,7 +93,7 @@ public class promotionServices {
 
     public boolean updatePromotion(promotion p) throws SQLException{
         try(Connection conn=JdbcUtils.getConn()){
-            String sql="UPDATE promotion set discount=?,date_start=?,date_end=? where id=?";
+            String sql="UPDATE product set discount=?,date_start=?,date_end=? where id=?";
 
             PreparedStatement stm=conn.prepareCall(sql);
 
@@ -113,20 +107,6 @@ public class promotionServices {
             return stm.executeUpdate() > 0;
         }
 
-    }
-
- 
-
-    public boolean checkday( String p) throws SQLException{
-        try(Connection conn=JdbcUtils.getConn()){
-            String sql="UPDATE promotion set active=? where startDate<? && endDate<?";
-
-            PreparedStatement stm=conn.prepareCall(sql);
-            stm.setInt(1, 0);
-            stm.setString(2, p);
-            stm.setString(3, p);
-           return stm.executeUpdate()>0;
-        }
     }
 
 

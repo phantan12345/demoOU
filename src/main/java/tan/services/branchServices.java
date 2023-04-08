@@ -91,7 +91,7 @@ public class branchServices {
 
     public boolean updateBranch(branch p) throws SQLException{
         try(Connection conn=JdbcUtils.getConn()){
-            String sql="UPDATE branch set  name=?,address=? where id=?";
+            String sql="UPDATE branch set   name=?,address=? where id=?";
 
             PreparedStatement stm=conn.prepareCall(sql);
 

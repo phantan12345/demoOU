@@ -36,9 +36,7 @@ import setting.Singleton;
 import setting.SwitchPage;
 import tan.pojo.employee;
 import tan.pojo.user;
-import tan.services.*;
-import java.util.regex.Matcher;
-import java.util.regex.Pattern;
+import tan.services.employeeServices;
 
 /**
  *
@@ -63,8 +61,6 @@ public class LoginController implements Initializable {
 
     public String usernameString;
 
-    
-
     // DATABASE TOOLS
     private Connection connect;
     private PreparedStatement prepare;
@@ -79,7 +75,6 @@ public class LoginController implements Initializable {
         if (username.getText().isEmpty() || password.getText().isEmpty()) {
             info.infoBox("Please fill all blank fields", "Error Message", "2");
         } else {
-            System.err.println(e.getName());
             if (e!=null) {
                 // Lấy đối tượng Singleton
                 Singleton singleton = Singleton.getInstance();

@@ -8,9 +8,6 @@ import java.sql.PreparedStatement;
 import java.sql.ResultSet;
 import java.sql.SQLException;
 import java.sql.Statement;
-import java.text.ParseException;
-import java.time.LocalDate;
-import java.time.format.DateTimeFormatter;
 import java.util.ArrayList;
 import java.util.List;
 import java.util.Optional;
@@ -55,7 +52,6 @@ import tan.services.branchServices;
 import tan.services.employeeServices;
 import tan.services.promotionServices;
 import tan.services.branchServices;
-import setting.Info;
 
 /**
  *
@@ -147,9 +143,6 @@ public class adminController implements Initializable {
 
     @FXML
     private TextField txtproductStatus;
-
-    @FXML
-    private TextField txtBarcode;
 
     @FXML
     private ComboBox<String> productType;
@@ -381,23 +374,10 @@ public class adminController implements Initializable {
         stage.setIconified(true);
     }
 
-
-    public String checkStattus(List<product> list){
-        String info="";
-        for (product i : list) {
-           if(i.getStatus()<5){
-                info+=i.getName()+":"+i.getStatus()+"\n";
-           }
-        }
-        // info="Please enter more items";
-        return info;
-    }
-
     public void loadProduct(String kw) throws SQLException {
         List<product> ds = product.getProducts();
         this.productFD_tableView.getItems().clear();
         this.productFD_tableView.setItems(FXCollections.observableList(ds));
-        
     }
 
     public void loadBranch(String kw) throws SQLException {
@@ -408,9 +388,6 @@ public class adminController implements Initializable {
         branchFD_col_productID.setCellValueFactory(new PropertyValueFactory<>("id"));
         branchFD_col_productName.setCellValueFactory(new PropertyValueFactory<>("name"));
         branchFD_col_productAddress.setCellValueFactory(new PropertyValueFactory<>("address"));
-
-
-       
 
     }
 
@@ -427,14 +404,10 @@ public class adminController implements Initializable {
 
     }
 
-    public void loadPromotion(String kw) throws ParseException, SQLException  {
+    public void loadPromotion(String kw) throws SQLException {
         List<promotion> listpromottion = promo.getPromotion();
-        
         this.productFD_tableView.getItems().clear();
         this.promotionFD_tableview.setItems(FXCollections.observableList(listpromottion));
-
-        
-       
 
     }
 
@@ -458,50 +431,44 @@ public class adminController implements Initializable {
 
     }
 
-    public void clearProduct() {
-        txtproductName.clear();
-        txtproductStatus.clear();
-        txtproductprice.clear();
-        txtBarcode.clear();
-
-    }
     public void addProduct(ActionEvent evt) throws SQLException {
-        String km = "";
-        if (cbPromotion.getSelectionModel().getSelectedIndex() < 0) {
-            km = null;
-        } else {
-            km = cbPromotion.getSelectionModel().getSelectedItem().getId();
-        }
-        
-        try {
-           product p = new product(txtproductName.getText(),
-            productType.getSelectionModel().getSelectedItem(),
-            Integer.parseInt(txtproductprice.getText()),
-             Integer.parseInt(txtproductStatus.getText()),
-            km,txtBarcode.getText());
-         if (product.addProduct(p)) {
+        product p = new product(txtproductName.getText(),
+                productType.getSelectionModel().getSelectedItem(),
+                Integer.parseInt(txtproductprice.getText()), Integer.parseInt(txtproductStatus.getText()),
+                cbPromotion.getSelectionModel().getSelectedItem().getId(),txtproductName.getText());
+        if (product.addProduct(p)) {
             this.loadProduct(null);
-            Info.infoBox("successfully add", "Message", "1");
+            Alert alert = new Alert(AlertType.INFORMATION);
+            alert.setTitle("Message");
+            alert.setHeaderText(null);
+            alert.setContentText("successfully add");
+            alert.showAndWait();
+        } else {
 
-        }
-        } catch (Exception e) {
-            Info.infoBox("Please fill all blank fields", "Error Message", "2");
+            Alert alert = new Alert(AlertType.ERROR);
+            alert.setTitle("Error Message");
+            alert.setHeaderText(null);
+            alert.setContentText("Please fill all blank fields");
+            alert.showAndWait();
         }
 
     }
 
     public void deleteProduct(ActionEvent evt) throws SQLException {
-        try {
-            if (product.deleteProduct(productFD_tableView.getSelectionModel().getSelectedItem().getId())) {
-                this.loadProduct(null);
-                Info.infoBox("successfully delete", "Message", "1");
-
-            }
-        } catch (Exception e) {
-            Info.infoBox("Please fill all blank fields", "Error Message", "2");
+        if (product.deleteProduct(productFD_tableView.getSelectionModel().getSelectedItem().getId())) {
+            this.loadProduct(null);
+            Alert alert = new Alert(AlertType.INFORMATION);
+            alert.setTitle("Message");
+            alert.setHeaderText(null);
+            alert.setContentText("successfully delete");
+            alert.showAndWait();
+        } else {
+            Alert alert = new Alert(AlertType.ERROR);
+            alert.setTitle("Error Message");
+            alert.setHeaderText(null);
+            alert.setContentText("Please fill all blank fields");
+            alert.showAndWait();
         }
-  
-           
 
     }
 
@@ -522,17 +489,30 @@ public class adminController implements Initializable {
 
             if (product.updateProduct(p)) {
                 this.loadProduct(null);
-                Info.infoBox("successfully update", "Message", "1");
-               
+
+                Alert alert = new Alert(AlertType.INFORMATION);
+                alert.setTitle("Message");
+                alert.setHeaderText(null);
+                alert.setContentText("successfully update");
+                alert.showAndWait();
             }
         } catch (Exception e) {
-            Info.infoBox("Please fill all blank fields", "Error Message", "2");
-
+            Alert alert = new Alert(AlertType.ERROR);
+            alert.setTitle("Error Message");
+            alert.setHeaderText(null);
+            alert.setContentText("Please fill all blank fields");
+            alert.showAndWait();
         }
 
     }
 
-   
+    public void clearProduct(ActionEvent evt) {
+        txtproductID.clear();
+        txtproductName.clear();
+        txtproductStatus.clear();
+        txtproductprice.clear();
+
+    }
 
     public void select() throws SQLException {
         product p = productFD_tableView.getSelectionModel().getSelectedItem();
@@ -549,41 +529,20 @@ public class adminController implements Initializable {
 
     }
 
-    public void selectPromo() throws SQLException {
-        promotion p = promotionFD_tableview.getSelectionModel().getSelectedItem();
-        int num = promotionFD_tableview.getSelectionModel().getSelectedIndex();
-        if ((num - 1) < -1) {
-            return;
-        }
+    // public void selectEmploye() throws SQLException {
+    // employee p = employeeFD_tableview.getSelectionModel().getSelectedItem();
+    // int num = productFD_tableView.getSelectionModel().getSelectedIndex();
+    // if ((num - 1) < -1) {
+    // return;
+    // }
 
-        promotionFD_txtDiscount.setText(String.valueOf(p.getDiscount()));
-        promotionFD_dtStartdate.setValue(p.getStar().toLocalDate());
-        promotionFD_dtEnddate.setValue(p.getEnd().toLocalDate());
-        
+    // txtproductName.setText(p.getName());
+    // txtproductprice.setText(String.valueOf(p.getPhone()));
+    // txtproductStatus.setText(String.valueOf(p.getStatus()));
+    // this.productType.setPromptText(p.getType());
+    // this.cbPromotion.setPromptText(p.getKm_id());
 
-    }
-
-    public void selectEmploye() throws SQLException {
-    employee p = employeeFD_tableview.getSelectionModel().getSelectedItem();
-    int num = employeeFD_tableview.getSelectionModel().getSelectedIndex();
-    if ((num - 1) < -1) {
-    return;
-    }
-
- 
-    employee_txtname.setText(p.getName());
-    employee_txtphone.setText(p.getPhone());
-    employee_cbbranch.setPromptText(branch.getBranch( p.getIdbr()).getAddress());
-    if(p.getActive()==1){
-        employee_cbactive.setSelected(true);
-    }
-    if(p.getActive()==0){
-        employee_cbactive.setSelected(false);
-    }
-   
-    }
-
-
+    // }
 
     private String[] categories = { "Meals", "Drinks" };
 
@@ -602,26 +561,39 @@ public class adminController implements Initializable {
     // branch
 
     public void addBranch(ActionEvent evt) throws SQLException {
-        try {
-            branch b = new branch(branchFD_txtbranchName.getText(), branchFD_txtbranchAddress.getText());
-            if (branch.addBranch(b)) {
-                this.loadBranch(null);
-                Info.infoBox("successfully add", "Message", "1");
+        branch b = new branch(branchFD_txtbranchName.getText(), branchFD_txtbranchAddress.getText());
+        if (branch.addBranch(b)) {
+            this.loadBranch(null);
+            Alert alert = new Alert(AlertType.INFORMATION);
+            alert.setTitle("Message");
+            alert.setHeaderText(null);
+            alert.setContentText("successfully add");
+            alert.showAndWait();
+        } else {
 
-            }
-        } catch (Exception e) {
-            Info.infoBox("Please fill all blank fields", "Error Message", "2");
+            Alert alert = new Alert(AlertType.ERROR);
+            alert.setTitle("Error Message");
+            alert.setHeaderText(null);
+            alert.setContentText("Please fill all blank fields");
+            alert.showAndWait();
         }
+
     }
 
     public void deleteBranch(ActionEvent evt) throws SQLException {
         if (branch.deleteBranch((branchFD_tableView.getSelectionModel().getSelectedItem()).getId())) {
             this.loadBranch(null);
-            Info.infoBox("successfully delete", "Message", "1");
-
+            Alert alert = new Alert(AlertType.INFORMATION);
+            alert.setTitle("Message");
+            alert.setHeaderText(null);
+            alert.setContentText("successfully delete");
+            alert.showAndWait();
         } else {
-            Info.infoBox("Please fill all blank fields", "Error Message", "2");
-
+            Alert alert = new Alert(AlertType.ERROR);
+            alert.setTitle("Error Message");
+            alert.setHeaderText(null);
+            alert.setContentText("Please fill all blank fields");
+            alert.showAndWait();
         }
 
     }
@@ -641,11 +613,18 @@ public class adminController implements Initializable {
             if (branch.updateBranch(b)) {
                 this.loadBranch(null);
 
-                Info.infoBox("successfully update", "Message", "1");
-
+                Alert alert = new Alert(AlertType.INFORMATION);
+                alert.setTitle("Message");
+                alert.setHeaderText(null);
+                alert.setContentText("successfully update");
+                alert.showAndWait();
             }
         } catch (Exception e) {
-            Info.infoBox("Please fill all blank fields", "Error Message", "2");
+            Alert alert = new Alert(AlertType.ERROR);
+            alert.setTitle("Error Message");
+            alert.setHeaderText(null);
+            alert.setContentText("Please fill all blank fields");
+            alert.showAndWait();
         }
 
     }
@@ -658,32 +637,41 @@ public class adminController implements Initializable {
         if (employee_cbactive.isSelected()) {
             ac = 1;
         }
-        try {
-            employee b = new employee(employee_txtname.getText(),
-            employee_txtphone.getText(), ac, br);
+        employee b = new employee(employee_txtname.getText(),
+                employee_txtphone.getText(), ac, br);
 
-    if (employee.addEmployee(b)) {
-        this.loadEmoploye(null);
-        Info.infoBox("successfully add", "Message", "1");
+        if (employee.addEmployee(b)) {
+            this.loadEmoploye(null);
+            Alert alert = new Alert(AlertType.INFORMATION);
+            alert.setTitle("Message");
+            alert.setHeaderText(null);
+            alert.setContentText("successfully add");
+            alert.showAndWait();
+        } else {
 
-    } 
-        } catch (Exception e) {
-            Info.infoBox("Please fill all blank fields", "Error Message", "2");
-
+            Alert alert = new Alert(AlertType.ERROR);
+            alert.setTitle("Error Message");
+            alert.setHeaderText(null);
+            alert.setContentText("Please fill all blank fields");
+            alert.showAndWait();
         }
-     
 
     }
 
     public void deleteEmployee(ActionEvent evt) throws SQLException {
         if (employee.deleteEmployee((employeeFD_tableview.getSelectionModel().getSelectedItem()).getId())) {
             this.loadEmoploye(null);
-            Info.infoBox("successfully delete", "Message", "1");
-            
-
-
+            Alert alert = new Alert(AlertType.INFORMATION);
+            alert.setTitle("Message");
+            alert.setHeaderText(null);
+            alert.setContentText("successfully delete");
+            alert.showAndWait();
         } else {
-            Info.infoBox("Please fill all blank fields", "Error Message", "2");
+            Alert alert = new Alert(AlertType.ERROR);
+            alert.setTitle("Error Message");
+            alert.setHeaderText(null);
+            alert.setContentText("Please fill all blank fields");
+            alert.showAndWait();
         }
 
     }
@@ -692,49 +680,65 @@ public class adminController implements Initializable {
 
         try {
             employee p = employeeFD_tableview.getSelectionModel().getSelectedItem();
-            if(employee_cbactive.isSelected()){
-                p.setActive(1);
-            }else{
-                p.setActive(0);
-            }
+
             if (employee.updateEmployee(p)) {
-                this.loadEmoploye(null);
+                this.loadBranch(null);
 
-                Info.infoBox("successfully delete", "Message", "1");
-
+                Alert alert = new Alert(AlertType.INFORMATION);
+                alert.setTitle("Message");
+                alert.setHeaderText(null);
+                alert.setContentText("successfully update");
+                alert.showAndWait();
             }
         } catch (Exception e) {
-            Info.infoBox("Please fill all blank fields", "Error Message", "2");
-
+            Alert alert = new Alert(AlertType.ERROR);
+            alert.setTitle("Error Message");
+            alert.setHeaderText(null);
+            alert.setContentText("Please fill all blank fields");
+            alert.showAndWait();
         }
 
     }
 
     // promotion
 
-    public void addPromotion(ActionEvent evt) throws SQLException, ParseException {
+    public void addPromotion(ActionEvent evt) throws SQLException {
         Date start = Date.valueOf(this.promotionFD_dtStartdate.getValue());
         Date end = Date.valueOf(this.promotionFD_dtEnddate.getValue());
-     try {
-        promotion b = new promotion(Integer.parseInt(promotionFD_txtDiscount.getText()),start, end,1);
+        promotion b = new promotion(Integer.parseInt(promotionFD_txtDiscount.getText()),start, end);
 
         if (promo.addPromotion(b)) {
             this.loadPromotion(null);
-            Info.infoBox("successfully delete", "Message", "1");
+            Alert alert = new Alert(AlertType.INFORMATION);
+            alert.setTitle("Message");
+            alert.setHeaderText(null);
+            alert.setContentText("successfully add");
+            alert.showAndWait();
+        } else {
 
+            Alert alert = new Alert(AlertType.ERROR);
+            alert.setTitle("Error Message");
+            alert.setHeaderText(null);
+            alert.setContentText("Please fill all blank fields");
+            alert.showAndWait();
         }
-        } catch (Exception e) {
-            Info.infoBox("Please fill all blank fields", "Error Message", "2");
-         }
+
     }
 
-    public void deletePromotion(ActionEvent evt) throws SQLException, ParseException {
+    public void deletePromotion(ActionEvent evt) throws SQLException {
         if (promo.deletePromotion((promotionFD_tableview.getSelectionModel().getSelectedItem()).getId())) {
             this.loadPromotion(null);
-            Info.infoBox("successfully delete", "Message", "1");
+            Alert alert = new Alert(AlertType.INFORMATION);
+            alert.setTitle("Message");
+            alert.setHeaderText(null);
+            alert.setContentText("successfully delete");
+            alert.showAndWait();
         } else {
-            Info.infoBox("Please fill all blank fields", "Error Message", "2");
-
+            Alert alert = new Alert(AlertType.ERROR);
+            alert.setTitle("Error Message");
+            alert.setHeaderText(null);
+            alert.setContentText("Please fill all blank fields");
+            alert.showAndWait();
         }
 
     }
@@ -743,64 +747,49 @@ public class adminController implements Initializable {
 
         try {
             promotion p = promotionFD_tableview.getSelectionModel().getSelectedItem();
-       
+
             if (promo.updatePromotion(p)) {
                 this.loadPromotion(null);
 
-                Info.infoBox("successfully update", "Message", "1");
-
+                Alert alert = new Alert(AlertType.INFORMATION);
+                alert.setTitle("Message");
+                alert.setHeaderText(null);
+                alert.setContentText("successfully update");
+                alert.showAndWait();
             }
         } catch (Exception e) {
-            Info.infoBox("Please fill all blank fields", "Error Message", "2");
-
+            Alert alert = new Alert(AlertType.ERROR);
+            alert.setTitle("Error Message");
+            alert.setHeaderText(null);
+            alert.setContentText("Please fill all blank fields");
+            alert.showAndWait();
         }
 
     }
-
-    public void checkday(List<promotion> aList) throws SQLException{
-        LocalDate myLocalDate = LocalDate.now();
-        DateTimeFormatter formatter = DateTimeFormatter.ofPattern("yyyy/MM/dd");
-        String formattedDateTime = myLocalDate.format(formatter);
-        for (promotion promotion : aList) {
-            promo.checkday(formattedDateTime);
-        }
-    }
-
-
-
 
     @Override
     public void initialize(URL location, ResourceBundle resources) {
         this.availableFDType();
 
-
         try {
             List<promotion> listpromottion = promo.getPromotion();
-            List<product> dspr = product.getProducts();
             this.cbPromotion.setItems(FXCollections.observableList(listpromottion));
+
             List<branch> ds = branch.getBranchs();
             this.employee_cbbranch.setItems(FXCollections.observableList(ds));
 
             // promotion
             loadCol_promotion();
             loadPromotion(null);
-           
 
             this.loadProduct(null);
             this.loadBranch(null);
-
-
             loadEmoploye(null);
             this.loadCol();
-            Info.infoBox(checkStattus(dspr), "Message", "1");
 
-            checkday(listpromottion);
         } catch (SQLException ex) {
             Logger.getLogger(adminController.class.getName()).log(Level.SEVERE, null, ex);
-        } catch (ParseException e) {
-            // TODO Auto-generated catch block
-            e.printStackTrace();
-        } 
+        }
 
     }
 

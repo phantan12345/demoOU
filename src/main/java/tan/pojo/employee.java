@@ -100,7 +100,7 @@ public class employee {
     private String id;
   
 {
-    id = UUID.randomUUID().toString();
+        setId(UUID.randomUUID().toString());
 }
     private String name;
     private String phone;    
@@ -126,5 +126,12 @@ public class employee {
         this.active=active;
         this.idbr=idbr;
         
+    }
+
+    /**
+     * @param id the id to set
+     */
+    public void setId(String id) {
+        this.id = id;
     }
 }

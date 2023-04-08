@@ -79,14 +79,15 @@ public class employeeServices {
 
     public boolean updateEmployee(employee p) throws SQLException {
         try (Connection conn = JdbcUtils.getConn()) {
-            String sql = "UPDATE branch set fullName=?,phoneNumber=?,idBr=? where id=?";
+            String sql = "UPDATE employee set fullName=?,phoneNumber=?,idBr=?, Active=? where id=?";
 
             PreparedStatement stm = conn.prepareCall(sql);
 
             stm.setString(1, p.getName());
             stm.setString(2, p.getPhone());
             stm.setString(3, p.getIdbr());
-            stm.setString(4, p.getId());
+            stm.setInt(4, p.getActive());
+            stm.setString(5, p.getId());
 
             return stm.executeUpdate() > 0;
         }

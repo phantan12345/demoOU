@@ -55,7 +55,7 @@ public class ProductServices {
         try (Connection conn = JdbcUtils.getConn()) {
 
             conn.setAutoCommit(false);
-            String sql = "INSERT INTO product(id,barcode,name,type,price,status,idPr) VALUES( ?,?, ?,?,?,?,?)";
+            String sql = "INSERT INTO product(id,barcode,name,type,price,status,idPr) VALUES(?,?,?,?,?,?,?)";
             PreparedStatement stm = conn.prepareCall(sql);
 
           stm.setString(1, p.getId());

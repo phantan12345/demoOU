@@ -10,6 +10,7 @@ import java.sql.PreparedStatement;
 import java.sql.ResultSet;
 
 import setting.JdbcUtils;
+import tan.pojo.product;
 import tan.pojo.promotion;
 
 public class promotionServices {
@@ -46,8 +47,8 @@ public class promotionServices {
 
             promotion c=new promotion(rs.getString("id"), 
             rs.getInt("discount"),
-             rs.getDate("star"), 
-             rs.getDate("end"),
+             rs.getDate("startDate"), 
+             rs.getDate("endDate"),
             rs.getInt("active")     
         );
 
@@ -114,6 +115,7 @@ public class promotionServices {
 
     }
 
+ 
 
     public boolean checkday( String p) throws SQLException{
         try(Connection conn=JdbcUtils.getConn()){

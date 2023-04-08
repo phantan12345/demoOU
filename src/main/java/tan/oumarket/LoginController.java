@@ -36,7 +36,9 @@ import setting.Singleton;
 import setting.SwitchPage;
 import tan.pojo.employee;
 import tan.pojo.user;
-import tan.services.*;;
+import tan.services.*;
+import java.util.regex.Matcher;
+import java.util.regex.Pattern;
 
 /**
  *
@@ -60,6 +62,8 @@ public class LoginController implements Initializable {
     private Button close;
 
     public String usernameString;
+
+    
 
     // DATABASE TOOLS
     private Connection connect;

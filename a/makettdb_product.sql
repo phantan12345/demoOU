@@ -1,8 +1,8 @@
--- MySQL dump 10.13  Distrib 8.0.32, for Win64 (x86_64)
+-- MySQL dump 10.13  Distrib 8.0.30, for Win64 (x86_64)
 --
 -- Host: localhost    Database: makettdb
 -- ------------------------------------------------------
--- Server version	8.0.32
+-- Server version	8.0.30
 
 /*!40101 SET @OLD_CHARACTER_SET_CLIENT=@@CHARACTER_SET_CLIENT */;
 /*!40101 SET @OLD_CHARACTER_SET_RESULTS=@@CHARACTER_SET_RESULTS */;
@@ -23,13 +23,13 @@ DROP TABLE IF EXISTS `product`;
 /*!40101 SET @saved_cs_client     = @@character_set_client */;
 /*!50503 SET character_set_client = utf8mb4 */;
 CREATE TABLE `product` (
-  `id` varchar(50) COLLATE utf8mb4_unicode_ci NOT NULL,
-  `barcode` varchar(8) COLLATE utf8mb4_unicode_ci DEFAULT NULL,
-  `name` varchar(50) COLLATE utf8mb4_unicode_ci DEFAULT NULL,
-  `type` varchar(50) COLLATE utf8mb4_unicode_ci DEFAULT NULL,
+  `id` varchar(50) CHARACTER SET utf8mb4 COLLATE utf8mb4_unicode_ci NOT NULL,
+  `barcode` varchar(8) CHARACTER SET utf8mb4 COLLATE utf8mb4_unicode_ci DEFAULT NULL,
+  `name` varchar(50) CHARACTER SET utf8mb4 COLLATE utf8mb4_unicode_ci DEFAULT NULL,
+  `type` varchar(50) CHARACTER SET utf8mb4 COLLATE utf8mb4_unicode_ci DEFAULT NULL,
   `price` int DEFAULT NULL,
   `status` int DEFAULT NULL,
-  `idPr` varchar(50) COLLATE utf8mb4_unicode_ci DEFAULT NULL,
+  `idPr` varchar(50) CHARACTER SET utf8mb4 COLLATE utf8mb4_unicode_ci DEFAULT NULL,
   PRIMARY KEY (`id`),
   KEY `idPr` (`idPr`),
   CONSTRAINT `product_ibfk_1` FOREIGN KEY (`idPr`) REFERENCES `promotion` (`id`)
@@ -42,7 +42,7 @@ CREATE TABLE `product` (
 
 LOCK TABLES `product` WRITE;
 /*!40000 ALTER TABLE `product` DISABLE KEYS */;
-INSERT INTO `product` VALUES ('1','123','NuocTangLuc','chai',10000,118,NULL),('2','1234','Sting','chai',10000,12,NULL),('3','12','Cocacola','chai',10000,121,'1');
+INSERT INTO `product` VALUES ('1','123','NuocTangLuc',NULL,10000,14,'360fbd86-cba5-422a-9de7-525745f255e3'),('2','1234','Sting','chai',10000,12,NULL),('3','12','Cocacola',NULL,10000,121,'82027747-3091-4292-85e1-3b2b21ac7d78'),('b56f6884-243a-4cb7-aff1-b0d915c897b1','tan','tan','Drinks',1000,100,'82027747-3091-4292-85e1-3b2b21ac7d78');
 /*!40000 ALTER TABLE `product` ENABLE KEYS */;
 UNLOCK TABLES;
 /*!40103 SET TIME_ZONE=@OLD_TIME_ZONE */;
@@ -55,4 +55,4 @@ UNLOCK TABLES;
 /*!40101 SET COLLATION_CONNECTION=@OLD_COLLATION_CONNECTION */;
 /*!40111 SET SQL_NOTES=@OLD_SQL_NOTES */;
 
--- Dump completed on 2023-04-06 15:55:01
+-- Dump completed on 2023-04-07 23:51:12

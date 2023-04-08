@@ -1,11 +1,3 @@
-<<<<<<< HEAD
-package tan.pojo;
-
-public class promotion {
-    private String id;
-    private int discount;
-
-=======
 /*
  * Click nbfs://nbhost/SystemFileSystem/Templates/Licenses/license-default.txt to change this license
  * Click nbfs://nbhost/SystemFileSystem/Templates/Classes/Class.java to edit this template
@@ -30,6 +22,10 @@ public class promotion {
         return end;
     }
 
+    public int getAative() {
+        return active;
+    }
+
     /**
      * @return the star
      */
@@ -50,6 +46,10 @@ public class promotion {
     public void setStar(Date star) {
         this.star = star;
     }
+
+    public void setActive(Integer active) {
+        this.active = active;
+    }
     private String id;  
 {
     id = UUID.randomUUID().toString();
@@ -58,8 +58,8 @@ public class promotion {
 
     private Date star;
     private Date end;
+    private int active;
 
->>>>>>> son
     public int getDiscount() {
         return discount;
     }
@@ -68,20 +68,6 @@ public class promotion {
         return id;
     }
 
-<<<<<<< HEAD
-    public void setDiscount(int discount) {
-        this.discount = discount;
-    }
-
-    public void setId(String id) {
-        this.id = id;
-    }
-    public promotion(){}
-
-    public promotion(String id, int dis){
-        this.id=id;
-        this.discount=dis;
-=======
  
    
     public promotion(){}
@@ -93,27 +79,34 @@ public class promotion {
 
     }
 
-    public promotion( int dis,Date start,Date end ){
+    public promotion(String id, int dis,Date start,Date end,int ac ){
         this.id=id;
         this.discount=dis;
         this.star=start;
         this.end=end;
+        this.active=ac;
     }
-    public promotion(String id, int dis,String start,String end ) throws ParseException{
+
+    public promotion( int dis,Date start,Date end,int ac ){
+        this.id=id;
+        this.discount=dis;
+        this.star=start;
+        this.end=end;
+        this.active=ac;
+
+    }
+    public promotion(String id, int dis,String start,String end,int ac ) throws ParseException{
         this.id=id;
         this.discount=dis;
         this.star=(Date)setting.dateFormat.parse(start);
         this.end=(Date)setting.dateFormat.parse(end);
+        this.active=ac;
 
->>>>>>> son
+
     }
     @Override
     public String toString() {
       
         return String.valueOf(this.discount);
     }
-<<<<<<< HEAD
-
-=======
->>>>>>> son
 }

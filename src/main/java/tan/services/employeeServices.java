@@ -11,7 +11,6 @@ import javafx.scene.control.Alert;
 import javafx.scene.control.Alert.AlertType;
 
 import java.sql.Statement;
-import setting.Info;
 
 import setting.JdbcUtils;
 import tan.pojo.branch;
@@ -21,13 +20,12 @@ import tan.services.branchServices;
 public class employeeServices {
 
     public branchServices branch = new branchServices();
-    Info in = new Info();
 
     public List<employee> getEmployees() throws SQLException {
         List<employee> ds = new ArrayList<>();
         try (Connection conn = JdbcUtils.getConn()) {
             Statement stm = conn.createStatement();
-            
+
             ResultSet rs = stm.executeQuery("SELECT * FROM employee");
             while (rs.next()) {
                 employee b = new employee(
@@ -48,7 +46,7 @@ public class employeeServices {
 
     public boolean addEmployee(employee b) throws SQLException {
         try (Connection conn = JdbcUtils.getConn()) {
-            
+
             conn.setAutoCommit(false);
             String sql = "INSERT INTO employee(id,fullName,phoneNumber,active,idBr) VALUES(?,?,?,?,?)";
             PreparedStatement stm = conn.prepareCall(sql);
@@ -81,21 +79,22 @@ public class employeeServices {
 
     public boolean updateEmployee(employee p) throws SQLException {
         try (Connection conn = JdbcUtils.getConn()) {
-            String sql = "UPDATE branch set fullName=?,phoneNumber=?,idBr=? where id=?";
+            String sql = "UPDATE employee set fullName=?,phoneNumber=?,idBr=?, Active=? where id=?";
 
             PreparedStatement stm = conn.prepareCall(sql);
 
             stm.setString(1, p.getName());
             stm.setString(2, p.getPhone());
             stm.setString(3, p.getIdbr());
-            stm.setString(4, p.getId());
+            stm.setInt(4, p.getActive());
+            stm.setString(5, p.getId());
 
             return stm.executeUpdate() > 0;
         }
     }
 
     public employee checkEmployee(String phone, String password) throws SQLException {
-        employee c = null;
+        employee c=null;
         try (Connection conn = JdbcUtils.getConn()) {
             String sql = "SELECT * FROM employee WHERE phoneNumber = ? and password = ?";
             PreparedStatement stm = conn.prepareCall(sql);
@@ -115,4 +114,8 @@ public class employeeServices {
         }
 
     }
+    
 }
+
+    
+

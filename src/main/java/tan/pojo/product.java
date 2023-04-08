@@ -4,28 +4,6 @@
  */
 package tan.pojo;
 
-<<<<<<< HEAD
-/**
- *
- * @author ADMIN
- */
-public class product {
-
-    /**
-     * @return the km_id
-     */
-    public String getKm_id() {
-        return km_id;
-    }
-
-    /**
-     * @param km_id the km_id to set
-     */
-    public void setKm_id(String km_id) {
-        this.km_id = km_id;
-    }
-
-=======
 import java.util.UUID;
 
 /**
@@ -54,6 +32,16 @@ public class product {
 
     public product( String id,String name,String type,int price,int status,String km_id){
         this.id=id;
+        this.name=name;
+        this.type=type;
+        this.price=price;
+        this.status=status;
+        this.idKM=km_id;
+       }
+
+       public product( String id,String bar,String name,String type,int price,int status,String km_id){
+        this.id=id;
+        this.barcode=bar;
         this.name=name;
         this.type=type;
         this.price=price;
@@ -94,7 +82,6 @@ public class product {
     }
     
     
->>>>>>> son
     /**
      * @return the id
      */
@@ -164,37 +151,6 @@ public class product {
     public void setStatus(int status) {
         this.status = status;
     }
-<<<<<<< HEAD
-    private String id;
-    private String name;
-    private String type;
-    private int price;
-    private int status;
-    private String km_id;
-    
-    
-    public product(){}
-    
-   
-    public product( String id,String name,String type,int price,int status){
-     this.id=id;
-     this.name=name;
-     this.type=type;
-     this.price=price;
-     this.status=status;
-    }
-
-    public product( String id,String name,String type,int price,int status,String km_id){
-        this.id=id;
-        this.name=name;
-        this.type=type;
-        this.price=price;
-        this.status=status;
-        this.km_id=km_id;
-       }
-
-
-=======
 
     /**
      * @return the idKM
@@ -224,6 +180,5 @@ public class product {
         this.barcode = barcode;
     }
     
->>>>>>> son
     
 }

@@ -11,10 +11,6 @@ public class employee {
         return active;
     }
 
-<<<<<<< HEAD
-=======
-    
->>>>>>> son
     /**
      * @return the id
      */
@@ -29,24 +25,12 @@ public class employee {
         return idbr;
     }
 
-<<<<<<< HEAD
-=======
-
-
-
->>>>>>> son
     /**
      * @return the name
      */
     public String getName() {
         return name;
     }
-<<<<<<< HEAD
-=======
-    public String getNamebr() {
-        return namebr;
-    }
->>>>>>> son
 
     /**
      * @return the password
@@ -81,10 +65,6 @@ public class employee {
         this.idbr = idbr;
     }
 
-<<<<<<< HEAD
-=======
-
->>>>>>> son
     /**
      * @param name the name to set
      */
@@ -92,13 +72,6 @@ public class employee {
         this.name = name;
     }
 
-<<<<<<< HEAD
-=======
-    public void setNamebr(String name) {
-        this.namebr = name;
-    }
-
->>>>>>> son
     /**
      * @param password the password to set
      */
@@ -112,7 +85,6 @@ public class employee {
     public void setPhone(String phone) {
         this.phone = phone;
     }
-<<<<<<< HEAD
     private static int dem=0;
     private String id;
     {
@@ -123,19 +95,6 @@ public class employee {
     private String password;
     private int active;
     private String idbr;
-=======
-    private String id;
-  
-{
-        setId(UUID.randomUUID().toString());
-}
-    private String name;
-    private String phone;    
-    private String password;
-    private int active;
-    private String idbr;
-    private String namebr;
->>>>>>> son
 
     public employee(){}
 
@@ -155,14 +114,4 @@ public class employee {
         this.idbr=idbr;
         
     }
-<<<<<<< HEAD
-=======
-
-    /**
-     * @param id the id to set
-     */
-    public void setId(String id) {
-        this.id = id;
-    }
->>>>>>> son
 }

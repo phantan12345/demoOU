@@ -12,6 +12,5 @@ package setting;
 public class data {
     
     public static String username;
-    public static Integer id_user;
     
 }

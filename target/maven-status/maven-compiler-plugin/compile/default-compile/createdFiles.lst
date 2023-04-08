@@ -4,11 +4,6 @@ setting\data.class
 setting\JdbcUtils.class
 tan\oumarket\adminController.class
 module-info.class
-<<<<<<< HEAD
 tan\oumarket\App.class
 tan\pojo\product.class
 tan\oumarket\LoginController.class
-=======
-tan\pojo\user.class
-tan\oumarket\App.class
->>>>>>> son

@@ -1,8 +1,8 @@
--- MySQL dump 10.13  Distrib 8.0.32, for Win64 (x86_64)
+-- MySQL dump 10.13  Distrib 8.0.30, for Win64 (x86_64)
 --
 -- Host: localhost    Database: makettdb
 -- ------------------------------------------------------
--- Server version	8.0.32
+-- Server version	8.0.30
 
 /*!40101 SET @OLD_CHARACTER_SET_CLIENT=@@CHARACTER_SET_CLIENT */;
 /*!40101 SET @OLD_CHARACTER_SET_RESULTS=@@CHARACTER_SET_RESULTS */;
@@ -23,10 +23,10 @@ DROP TABLE IF EXISTS `customer`;
 /*!40101 SET @saved_cs_client     = @@character_set_client */;
 /*!50503 SET character_set_client = utf8mb4 */;
 CREATE TABLE `customer` (
-  `id` varchar(50) COLLATE utf8mb4_unicode_ci NOT NULL,
-  `fullName` varchar(50) COLLATE utf8mb4_unicode_ci DEFAULT NULL,
-  `birthDay` varchar(50) COLLATE utf8mb4_unicode_ci DEFAULT NULL,
-  `phoneNumber` varchar(50) COLLATE utf8mb4_unicode_ci DEFAULT NULL,
+  `id` varchar(50) CHARACTER SET utf8mb4 COLLATE utf8mb4_unicode_ci NOT NULL,
+  `fullName` varchar(50) CHARACTER SET utf8mb4 COLLATE utf8mb4_unicode_ci DEFAULT NULL,
+  `birthDay` varchar(50) CHARACTER SET utf8mb4 COLLATE utf8mb4_unicode_ci DEFAULT NULL,
+  `phoneNumber` varchar(50) CHARACTER SET utf8mb4 COLLATE utf8mb4_unicode_ci DEFAULT NULL,
   PRIMARY KEY (`id`)
 ) ENGINE=InnoDB DEFAULT CHARSET=utf8mb4 COLLATE=utf8mb4_unicode_ci;
 /*!40101 SET character_set_client = @saved_cs_client */;
@@ -37,7 +37,7 @@ CREATE TABLE `customer` (
 
 LOCK TABLES `customer` WRITE;
 /*!40000 ALTER TABLE `customer` DISABLE KEYS */;
-INSERT INTO `customer` VALUES ('1','tan','05/04/2012','12'),('2','as','15/01/2019','123'),('3','as','13/04/2023','1234'),('4','as','13/04/2023','1234'),('5','as','13/04/2023','1234'),('6','as','13/04/2023','1234'),('7','tan','12/04/2023','1'),('8','khoa','09/04/2020','123'),('9','ds','10/04/2023','9899'),('cb0c3b65-0e4d-4cfc-b3b7-139c1533b51f','Nguyen Van A','06/04/2018','900000090');
+INSERT INTO `customer` VALUES ('1','tan','05/04/2012','12'),('2','as','15/01/2019','123'),('3','as','13/04/2023','1234'),('4','as','13/04/2023','1234'),('5','as','13/04/2023','1234'),('6','as','13/04/2023','1234'),('7','tan','12/04/2023','1'),('8','khoa','09/04/2020','123'),('9','ds','10/04/2023','9899'),('a4d6929d-cb85-4337-be73-3ee0cb0bf28c','phan tan','06/04/2023','123'),('c2ca4675-ea7a-4c13-8908-9e232bcb089a','tuyet','06/04/2023','372745193'),('cb0c3b65-0e4d-4cfc-b3b7-139c1533b51f','Nguyen Van A','06/04/2018','900000090'),('e4d07fc5-d095-4123-bf2f-4164223fa76a','tan','06/04/2023','372745193');
 /*!40000 ALTER TABLE `customer` ENABLE KEYS */;
 UNLOCK TABLES;
 /*!40103 SET TIME_ZONE=@OLD_TIME_ZONE */;
@@ -50,4 +50,4 @@ UNLOCK TABLES;
 /*!40101 SET COLLATION_CONNECTION=@OLD_COLLATION_CONNECTION */;
 /*!40111 SET SQL_NOTES=@OLD_SQL_NOTES */;
 
--- Dump completed on 2023-04-06 15:55:00
+-- Dump completed on 2023-04-07 23:51:12

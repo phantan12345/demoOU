@@ -1,4 +1,4 @@
-package tan.sevices;
+package tan.services;
 
 import java.sql.Connection;
 import java.sql.PreparedStatement;
@@ -36,6 +36,27 @@ public class branchServices {
     }
 
 
+    public branch getBranch(String id) throws SQLException {
+        branch b=new branch();
+        String sql="SELECT * FROM branch where id=?";
+        Connection connect = JdbcUtils.getConn();
+        PreparedStatement prepare = connect.prepareStatement(sql);
+        prepare.setString(1, id);
+        ResultSet rs = prepare.executeQuery();
+        if (rs.next()) {
+                
+            branch c = new branch(
+                   rs.getString("id"),
+                   rs.getString("name"),
+                   rs.getString("address"));
+
+           return c;
+       }
+
+        return b;
+    }
+
+
     public boolean addBranch(branch b) throws SQLException {
         try (Connection conn = JdbcUtils.getConn()) {
 
@@ -70,7 +91,7 @@ public class branchServices {
 
     public boolean updateBranch(branch p) throws SQLException{
         try(Connection conn=JdbcUtils.getConn()){
-            String sql="UPDATE branch set   name=?,address=? where id=?";
+            String sql="UPDATE branch set  name=?,address=? where id=?";
 
             PreparedStatement stm=conn.prepareCall(sql);
 

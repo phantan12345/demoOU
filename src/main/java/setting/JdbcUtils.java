@@ -16,6 +16,7 @@ import java.util.logging.Logger;
  * @author MarcoMan
  */
 public class JdbcUtils {
+
     static {
         try {
             // B1 Nap driver
@@ -29,4 +30,5 @@ public class JdbcUtils {
         // B2 Thiet lap ket noi
         return DriverManager.getConnection("jdbc:mysql://localhost/makettdb", "root", "phantan0106");
     }
+
 }

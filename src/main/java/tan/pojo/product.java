@@ -4,26 +4,84 @@
  */
 package tan.pojo;
 
+import java.util.UUID;
+
 /**
  *
- * @author ADMIN
+ * @author admin
  */
 public class product {
-
-    /**
-     * @return the km_id
-     */
-    public String getKm_id() {
-        return km_id;
+    private String id;
+    {
+        id = UUID.randomUUID().toString();
+    }
+    private String name;
+    private String type;
+    private int price;
+    private int status;
+    private String idKM;
+    private String barcode;
+    
+     public product( String id,String name,String type,int price,int status){
+     this.id=id;
+     this.name=name;
+     this.type=type;
+     this.price=price;
+     this.status=status;
     }
 
-    /**
-     * @param km_id the km_id to set
-     */
-    public void setKm_id(String km_id) {
-        this.km_id = km_id;
+    public product( String id,String name,String type,int price,int status,String km_id){
+        this.id=id;
+        this.name=name;
+        this.type=type;
+        this.price=price;
+        this.status=status;
+        this.idKM=km_id;
+       }
+
+       public product( String id,String bar,String name,String type,int price,int status,String km_id){
+        this.id=id;
+        this.barcode=bar;
+        this.name=name;
+        this.type=type;
+        this.price=price;
+        this.status=status;
+        this.idKM=km_id;
+       }
+       public product( String name,String type,int price,int status,String km_id,String bar){
+        this.id=id;
+        this.name=name;
+        this.type=type;
+        this.price=price;
+        this.status=status;
+        this.idKM=km_id;
+        this.barcode=bar;
+       }
+    
+    public product(String id,String barcode, String name, String type, int price, int status) {
+        this.id = id;
+        this.name = name;
+        this.type = type;
+        this.price = price;
+        this.status = status;
+        this.barcode = barcode;
     }
 
+    public product(String id, String name, String type, int price, int status, String idKM, String barcode) {
+        this.id = id;
+        this.name = name;
+        this.type = type;
+        this.price = price;
+        this.status = status;
+        this.idKM = idKM;
+        this.barcode = barcode;
+    }
+    
+    public product() {
+        this.name  ="k"   ;
+    }
+    
+    
     /**
      * @return the id
      */
@@ -93,34 +151,34 @@ public class product {
     public void setStatus(int status) {
         this.status = status;
     }
-    private String id;
-    private String name;
-    private String type;
-    private int price;
-    private int status;
-    private String km_id;
-    
-    
-    public product(){}
-    
-   
-    public product( String id,String name,String type,int price,int status){
-     this.id=id;
-     this.name=name;
-     this.type=type;
-     this.price=price;
-     this.status=status;
+
+    /**
+     * @return the idKM
+     */
+    public String getIdKM() {
+        return idKM;
     }
 
-    public product( String id,String name,String type,int price,int status,String km_id){
-        this.id=id;
-        this.name=name;
-        this.type=type;
-        this.price=price;
-        this.status=status;
-        this.km_id=km_id;
-       }
+    /**
+     * @param idKM the idKM to set
+     */
+    public void setIdKM(String idKM) {
+        this.idKM = idKM;
+    }
 
+    /**
+     * @return the barcode
+     */
+    public String getBarcode() {
+        return barcode;
+    }
 
+    /**
+     * @param barcode the barcode to set
+     */
+    public void setBarcode(String barcode) {
+        this.barcode = barcode;
+    }
+    
     
 }

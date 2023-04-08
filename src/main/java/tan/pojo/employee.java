@@ -11,6 +11,7 @@ public class employee {
         return active;
     }
 
+    
     /**
      * @return the id
      */
@@ -25,11 +26,17 @@ public class employee {
         return idbr;
     }
 
+
+
+
     /**
      * @return the name
      */
     public String getName() {
         return name;
+    }
+    public String getNamebr() {
+        return namebr;
     }
 
     /**
@@ -65,11 +72,16 @@ public class employee {
         this.idbr = idbr;
     }
 
+
     /**
      * @param name the name to set
      */
     public void setName(String name) {
         this.name = name;
+    }
+
+    public void setNamebr(String name) {
+        this.namebr = name;
     }
 
     /**
@@ -85,16 +97,17 @@ public class employee {
     public void setPhone(String phone) {
         this.phone = phone;
     }
-    private static int dem=0;
     private String id;
-    {
-        id = String.format("NV%d", dem++);
-    }
+  
+{
+    id = UUID.randomUUID().toString();
+}
     private String name;
-    private String phone;
+    private String phone;    
     private String password;
     private int active;
     private String idbr;
+    private String namebr;
 
     public employee(){}
 

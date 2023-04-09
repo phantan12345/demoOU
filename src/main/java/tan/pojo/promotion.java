@@ -22,6 +22,10 @@ public class promotion {
         return end;
     }
 
+    public int getAative() {
+        return active;
+    }
+
     /**
      * @return the star
      */
@@ -42,6 +46,10 @@ public class promotion {
     public void setStar(Date star) {
         this.star = star;
     }
+
+    public void setActive(Integer active) {
+        this.active = active;
+    }
     private String id;  
 {
     id = UUID.randomUUID().toString();
@@ -50,6 +58,7 @@ public class promotion {
 
     private Date star;
     private Date end;
+    private int active;
 
     public int getDiscount() {
         return discount;
@@ -70,17 +79,29 @@ public class promotion {
 
     }
 
-    public promotion( int dis,Date start,Date end ){
+    public promotion(String id, int dis,Date start,Date end,int ac ){
         this.id=id;
         this.discount=dis;
         this.star=start;
         this.end=end;
+        this.active=ac;
     }
-    public promotion(String id, int dis,String start,String end ) throws ParseException{
+
+    public promotion( int dis,Date start,Date end,int ac ){
+        this.id=id;
+        this.discount=dis;
+        this.star=start;
+        this.end=end;
+        this.active=ac;
+
+    }
+    public promotion(String id, int dis,String start,String end,int ac ) throws ParseException{
         this.id=id;
         this.discount=dis;
         this.star=(Date)setting.dateFormat.parse(start);
         this.end=(Date)setting.dateFormat.parse(end);
+        this.active=ac;
+
 
     }
     @Override

@@ -270,7 +270,7 @@ public class employeeController implements Initializable {
         orderQuantity.getValueFactory().setValue(1);
         txtProductID.setText("");
         fundsTotal();
-
+        info.mess();
     }
 
     public void deleteBill() throws SQLException {

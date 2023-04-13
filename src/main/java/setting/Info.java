@@ -5,6 +5,10 @@
 package setting;
 
 import java.util.Optional;
+import javafx.util.Duration;
+import javafx.animation.KeyFrame;
+import javafx.animation.Timeline;
+//import javafx.animation.Timeline;
 import javafx.scene.control.Alert;
 import javafx.scene.control.Alert.AlertType;
 import javafx.scene.control.ButtonBar.ButtonData;
@@ -48,5 +52,18 @@ public class Info {
             return false;
         }
         return true;
+    }
+
+    public void mess() {
+        Alert alert = new Alert(AlertType.INFORMATION, "Success");
+        alert.getButtonTypes().clear();
+        Timeline timeline = new Timeline(new KeyFrame(Duration.seconds(1), event -> {
+            alert.setResult(ButtonType.CLOSE);
+            alert.close();
+        }));
+
+        timeline.play();
+
+        alert.showAndWait();
     }
 }

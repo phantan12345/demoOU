@@ -35,7 +35,7 @@ public class ProductServices {
         try (Connection conn = JdbcUtils.getConn()) {
             Statement stm = conn.createStatement();
 
-            ResultSet rs = stm.executeQuery("SELECT * FROM product");
+                ResultSet rs = stm.executeQuery("SELECT * FROM product");
             while (rs.next()) {
                 product p = new product(
                         rs.getString("id"),

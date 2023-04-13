@@ -82,7 +82,7 @@ public class ProductServices {
 
     public Boolean deleteProduct(String p) throws SQLException {
         try (Connection conn = JdbcUtils.getConn()) {
-            String sql = "DELETE FORM product where id=?";
+            String sql = "DELETE FROM product where id=?";
             PreparedStatement stm = conn.prepareCall(sql);
 
             stm.setString(1, p);

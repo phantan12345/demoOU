@@ -381,13 +381,12 @@ public class adminController implements Initializable {
         stage.setIconified(true);
     }
 
-
-    public String checkStattus(List<product> list){
-        String info="";
+    public String checkStattus(List<product> list) {
+        String info = "";
         for (product i : list) {
-           if(i.getStatus()<5){
-                info+=i.getName()+":"+i.getStatus()+"\n";
-           }
+            if (i.getStatus() < 5) {
+                info += i.getName() + ":" + i.getStatus() + "\n";
+            }
         }
         // info="Please enter more items";
         return info;
@@ -397,7 +396,7 @@ public class adminController implements Initializable {
         List<product> ds = product.getProducts();
         this.productFD_tableView.getItems().clear();
         this.productFD_tableView.setItems(FXCollections.observableList(ds));
-        
+
     }
 
     public void loadBranch(String kw) throws SQLException {
@@ -408,9 +407,6 @@ public class adminController implements Initializable {
         branchFD_col_productID.setCellValueFactory(new PropertyValueFactory<>("id"));
         branchFD_col_productName.setCellValueFactory(new PropertyValueFactory<>("name"));
         branchFD_col_productAddress.setCellValueFactory(new PropertyValueFactory<>("address"));
-
-
-       
 
     }
 
@@ -427,14 +423,11 @@ public class adminController implements Initializable {
 
     }
 
-    public void loadPromotion(String kw) throws ParseException, SQLException  {
+    public void loadPromotion(String kw) throws ParseException, SQLException {
         List<promotion> listpromottion = promo.getPromotion();
-        
+
         this.productFD_tableView.getItems().clear();
         this.promotionFD_tableview.setItems(FXCollections.observableList(listpromottion));
-
-        
-       
 
     }
 
@@ -445,7 +438,6 @@ public class adminController implements Initializable {
         productFD_col_type.setCellValueFactory(new PropertyValueFactory<>("type"));
         productFD_col_price.setCellValueFactory(new PropertyValueFactory<>("price"));
         productFD_col_status.setCellValueFactory(new PropertyValueFactory<>("status"));
-
 
     }
 
@@ -465,6 +457,7 @@ public class adminController implements Initializable {
         txtBarcode.clear();
 
     }
+
     public void addProduct(ActionEvent evt) throws SQLException {
         String km = "";
         if (cbPromotion.getSelectionModel().getSelectedIndex() < 0) {
@@ -472,20 +465,26 @@ public class adminController implements Initializable {
         } else {
             km = cbPromotion.getSelectionModel().getSelectedItem().getId();
         }
-        
-        try {
-           product p = new product(txtproductName.getText(),
-            productType.getSelectionModel().getSelectedItem(),
-            Integer.parseInt(txtproductprice.getText()),
-             Integer.parseInt(txtproductStatus.getText()),
-            km,txtBarcode.getText());
-         if (product.addProduct(p)) {
-            this.loadProduct(null);
-            Info.infoBox("successfully add", "Message", "1");
 
-        }
-        } catch (Exception e) {
+        if (txtBarcode.getText().isEmpty() || txtproductName.getText().isEmpty() ||
+                txtproductStatus.getText().isEmpty() || txtproductprice.getText().isEmpty()) {
             Info.infoBox("Please fill all blank fields", "Error Message", "2");
+
+        } else {
+            if (checkNameProduct(txtproductName.getText())) {
+                Info.infoBox("erro name Product", "Error Message", "2");
+            } else {
+                product p = new product(txtproductName.getText(),
+                        productType.getSelectionModel().getSelectedItem(),
+                        Integer.parseInt(txtproductprice.getText()),
+                        Integer.parseInt(txtproductStatus.getText()),
+                        km, txtBarcode.getText());
+                if (product.addProduct(p)) {
+                    this.loadProduct(null);
+                    Info.infoBox("successfully add", "Message", "1");
+
+                }
+            }
         }
 
     }
@@ -500,8 +499,6 @@ public class adminController implements Initializable {
         } catch (Exception e) {
             Info.infoBox("Please fill all blank fields", "Error Message", "2");
         }
-  
-           
 
     }
 
@@ -523,7 +520,7 @@ public class adminController implements Initializable {
             if (product.updateProduct(p)) {
                 this.loadProduct(null);
                 Info.infoBox("successfully update", "Message", "1");
-               
+
             }
         } catch (Exception e) {
             Info.infoBox("Please fill all blank fields", "Error Message", "2");
@@ -531,8 +528,6 @@ public class adminController implements Initializable {
         }
 
     }
-
-   
 
     public void select() throws SQLException {
         product p = productFD_tableView.getSelectionModel().getSelectedItem();
@@ -559,31 +554,27 @@ public class adminController implements Initializable {
         promotionFD_txtDiscount.setText(String.valueOf(p.getDiscount()));
         promotionFD_dtStartdate.setValue(p.getStar().toLocalDate());
         promotionFD_dtEnddate.setValue(p.getEnd().toLocalDate());
-        
 
     }
 
     public void selectEmploye() throws SQLException {
-    employee p = employeeFD_tableview.getSelectionModel().getSelectedItem();
-    int num = employeeFD_tableview.getSelectionModel().getSelectedIndex();
-    if ((num - 1) < -1) {
-    return;
-    }
+        employee p = employeeFD_tableview.getSelectionModel().getSelectedItem();
+        int num = employeeFD_tableview.getSelectionModel().getSelectedIndex();
+        if ((num - 1) < -1) {
+            return;
+        }
 
- 
-    employee_txtname.setText(p.getName());
-    employee_txtphone.setText(p.getPhone());
-    employee_cbbranch.setPromptText(branch.getBranch( p.getIdbr()).getAddress());
-    if(p.getActive()==1){
-        employee_cbactive.setSelected(true);
-    }
-    if(p.getActive()==0){
-        employee_cbactive.setSelected(false);
-    }
-   
-    }
+        employee_txtname.setText(p.getName());
+        employee_txtphone.setText(p.getPhone());
+        employee_cbbranch.setPromptText(branch.getBranch(p.getIdbr()).getAddress());
+        if (p.getActive() == 1) {
+            employee_cbactive.setSelected(true);
+        }
+        if (p.getActive() == 0) {
+            employee_cbactive.setSelected(false);
+        }
 
-
+    }
 
     private String[] categories = { "Meals", "Drinks" };
 
@@ -658,20 +649,20 @@ public class adminController implements Initializable {
         if (employee_cbactive.isSelected()) {
             ac = 1;
         }
-        try {
-            employee b = new employee(employee_txtname.getText(),
-            employee_txtphone.getText(), ac, br);
-
-    if (employee.addEmployee(b)) {
-        this.loadEmoploye(null);
-        Info.infoBox("successfully add", "Message", "1");
-
-    } 
-        } catch (Exception e) {
+        
+        if (employee_txtname.getText().isEmpty() || employee_txtphone.getText().isEmpty()) {
             Info.infoBox("Please fill all blank fields", "Error Message", "2");
 
+        } else {
+            employee b = new employee(employee_txtname.getText(),
+                    employee_txtphone.getText(), ac, br);
+
+            if (employee.addEmployee(b)) {
+                this.loadEmoploye(null);
+                Info.infoBox("successfully add", "Message", "1");
+
+            }
         }
-     
 
     }
 
@@ -679,8 +670,6 @@ public class adminController implements Initializable {
         if (employee.deleteEmployee((employeeFD_tableview.getSelectionModel().getSelectedItem()).getId())) {
             this.loadEmoploye(null);
             Info.infoBox("successfully delete", "Message", "1");
-            
-
 
         } else {
             Info.infoBox("Please fill all blank fields", "Error Message", "2");
@@ -692,9 +681,9 @@ public class adminController implements Initializable {
 
         try {
             employee p = employeeFD_tableview.getSelectionModel().getSelectedItem();
-            if(employee_cbactive.isSelected()){
+            if (employee_cbactive.isSelected()) {
                 p.setActive(1);
-            }else{
+            } else {
                 p.setActive(0);
             }
             if (employee.updateEmployee(p)) {
@@ -715,17 +704,17 @@ public class adminController implements Initializable {
     public void addPromotion(ActionEvent evt) throws SQLException, ParseException {
         Date start = Date.valueOf(this.promotionFD_dtStartdate.getValue());
         Date end = Date.valueOf(this.promotionFD_dtEnddate.getValue());
-     try {
-        promotion b = new promotion(Integer.parseInt(promotionFD_txtDiscount.getText()),start, end,1);
+        try {
+            promotion b = new promotion(Integer.parseInt(promotionFD_txtDiscount.getText()), start, end, 1);
 
-        if (promo.addPromotion(b)) {
-            this.loadPromotion(null);
-            Info.infoBox("successfully delete", "Message", "1");
+            if (promo.addPromotion(b)) {
+                this.loadPromotion(null);
+                Info.infoBox("successfully delete", "Message", "1");
 
-        }
+            }
         } catch (Exception e) {
             Info.infoBox("Please fill all blank fields", "Error Message", "2");
-         }
+        }
     }
 
     public void deletePromotion(ActionEvent evt) throws SQLException, ParseException {
@@ -743,7 +732,7 @@ public class adminController implements Initializable {
 
         try {
             promotion p = promotionFD_tableview.getSelectionModel().getSelectedItem();
-       
+
             if (promo.updatePromotion(p)) {
                 this.loadPromotion(null);
 
@@ -757,7 +746,7 @@ public class adminController implements Initializable {
 
     }
 
-    public void checkday(List<promotion> aList) throws SQLException{
+    public void checkday(List<promotion> aList) throws SQLException {
         LocalDate myLocalDate = LocalDate.now();
         DateTimeFormatter formatter = DateTimeFormatter.ofPattern("yyyy/MM/dd");
         String formattedDateTime = myLocalDate.format(formatter);
@@ -766,13 +755,18 @@ public class adminController implements Initializable {
         }
     }
 
-
-
+    public boolean checkNameProduct(String name) throws SQLException {
+        for (product p : product.getProducts()) {
+            if (p.getName().equals(name)) {
+                return true;
+            }
+        }
+        return false;
+    }
 
     @Override
     public void initialize(URL location, ResourceBundle resources) {
         this.availableFDType();
-
 
         try {
             List<promotion> listpromottion = promo.getPromotion();
@@ -784,11 +778,9 @@ public class adminController implements Initializable {
             // promotion
             loadCol_promotion();
             loadPromotion(null);
-           
 
             this.loadProduct(null);
             this.loadBranch(null);
-
 
             loadEmoploye(null);
             this.loadCol();
@@ -800,7 +792,7 @@ public class adminController implements Initializable {
         } catch (ParseException e) {
             // TODO Auto-generated catch block
             e.printStackTrace();
-        } 
+        }
 
     }
 

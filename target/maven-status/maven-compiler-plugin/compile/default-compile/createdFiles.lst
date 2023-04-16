@@ -25,6 +25,5 @@ setting\Info.class
 tan\oumarket\Checkpassword.class
 tan\pojo\promotion.class
 tan\oumarket\App.class
-setting\check.class
 setting\Singleton.class
 tan\oumarket\LoginController.class

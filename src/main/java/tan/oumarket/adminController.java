@@ -43,6 +43,7 @@ import javafx.scene.input.MouseEvent;
 import javafx.scene.layout.AnchorPane;
 import javafx.stage.Stage;
 import javafx.stage.StageStyle;
+import setting.CheckText;
 import setting.JdbcUtils;
 import setting.data;
 import setting.setting;
@@ -266,6 +267,7 @@ public class adminController implements Initializable {
     private PreparedStatement prepare;
     private Statement statement;
     private ResultSet result;
+    CheckText ch = new CheckText();
 
     public void switchForm(ActionEvent event) {
 
@@ -460,30 +462,26 @@ public class adminController implements Initializable {
 
     public void addProduct(ActionEvent evt) throws SQLException {
         String km = "";
+        if (ch.checkEmpty(txtproductName.getText()) || ch.checkEmpty(txtBarcode.getText()) || ch.checkEmpty(txtproductStatus.getText())
+                || ch.checkEmpty(productType.getSelectionModel().getSelectedIndex()) || ch.checkEmpty(txtproductprice.getText())) {
+            return;
+        }
         if (cbPromotion.getSelectionModel().getSelectedIndex() < 0) {
             km = null;
         } else {
             km = cbPromotion.getSelectionModel().getSelectedItem().getId();
         }
-
-        if (txtBarcode.getText().isEmpty() || txtproductName.getText().isEmpty() ||
-                txtproductStatus.getText().isEmpty() || txtproductprice.getText().isEmpty()) {
-            Info.infoBox("Please fill all blank fields", "Error Message", "2");
-
+        if (checkNameProduct(txtproductName.getText())) {
+            Info.infoBox("erro name Product", "Error Message", "2");
         } else {
-            if (checkNameProduct(txtproductName.getText())) {
-                Info.infoBox("erro name Product", "Error Message", "2");
-            } else {
-                product p = new product(txtproductName.getText(),
-                        productType.getSelectionModel().getSelectedItem(),
-                        Integer.parseInt(txtproductprice.getText()),
-                        Integer.parseInt(txtproductStatus.getText()),
-                        km, txtBarcode.getText());
-                if (product.addProduct(p)) {
-                    this.loadProduct(null);
-                    Info.infoBox("successfully add", "Message", "1");
-
-                }
+            product p = new product(txtproductName.getText(),
+                    productType.getSelectionModel().getSelectedItem(),
+                    Integer.parseInt(txtproductprice.getText()),
+                    Integer.parseInt(txtproductStatus.getText()),
+                    km, txtBarcode.getText());
+            if (product.addProduct(p)) {
+                this.loadProduct(null);
+                Info.infoBox("successfully add", "Message", "1");
             }
         }
 
@@ -576,7 +574,7 @@ public class adminController implements Initializable {
 
     }
 
-    private String[] categories = { "Meals", "Drinks" };
+    private String[] categories = {"Meals", "Drinks"};
 
     public void availableFDType() {
         List<String> listCat = new ArrayList<>();
@@ -591,9 +589,10 @@ public class adminController implements Initializable {
     }
 
     // branch
-
     public void addBranch(ActionEvent evt) throws SQLException {
         try {
+            if(ch.checkEmpty(branchFD_txtbranchName.getText())||ch.checkEmpty(branchFD_txtbranchAddress.getText()))
+                return;
             branch b = new branch(branchFD_txtbranchName.getText(), branchFD_txtbranchAddress.getText());
             if (branch.addBranch(b)) {
                 this.loadBranch(null);
@@ -642,26 +641,21 @@ public class adminController implements Initializable {
     }
 
     // employee
-
     public void addEmployee(ActionEvent evt) throws SQLException {
         int ac = 0;
+        if (ch.checkEmpty(employee_txtname.getText()) || ch.checkEmpty(employee_txtphone.getText())
+                || ch.checkEmpty(employee_cbbranch.getSelectionModel().getSelectedIndex() )) {
+            return;
+        }
         String br = employee_cbbranch.getSelectionModel().getSelectedItem().getId();
         if (employee_cbactive.isSelected()) {
             ac = 1;
         }
-        
-        if (employee_txtname.getText().isEmpty() || employee_txtphone.getText().isEmpty()) {
-            Info.infoBox("Please fill all blank fields", "Error Message", "2");
+        employee b = new employee(employee_txtname.getText(), employee_txtphone.getText(), ac, br);
+        if (employee.addEmployee(b)) {
+            this.loadEmoploye(null);
+            Info.infoBox("successfully add", "Message", "1");
 
-        } else {
-            employee b = new employee(employee_txtname.getText(),
-                    employee_txtphone.getText(), ac, br);
-
-            if (employee.addEmployee(b)) {
-                this.loadEmoploye(null);
-                Info.infoBox("successfully add", "Message", "1");
-
-            }
         }
 
     }
@@ -700,10 +694,18 @@ public class adminController implements Initializable {
     }
 
     // promotion
-
     public void addPromotion(ActionEvent evt) throws SQLException, ParseException {
-        Date start = Date.valueOf(this.promotionFD_dtStartdate.getValue());
-        Date end = Date.valueOf(this.promotionFD_dtEnddate.getValue());
+        Date start = null;
+        Date end = null;
+        try {
+            start = Date.valueOf(this.promotionFD_dtStartdate.getValue());
+            end = Date.valueOf(this.promotionFD_dtEnddate.getValue());
+        } catch (Exception e) {
+            ch.checkEmpty(-1);
+            return;
+        }
+        if(ch.checkEmpty(promotionFD_txtDiscount.getText())||ch.checkEmpty(start)||ch.checkEmpty(end))
+            return;
         try {
             promotion b = new promotion(Integer.parseInt(promotionFD_txtDiscount.getText()), start, end, 1);
 
@@ -787,8 +789,10 @@ public class adminController implements Initializable {
             Info.infoBox(checkStattus(dspr), "Message", "1");
 
             checkday(listpromottion);
+
         } catch (SQLException ex) {
-            Logger.getLogger(adminController.class.getName()).log(Level.SEVERE, null, ex);
+            Logger.getLogger(adminController.class
+                    .getName()).log(Level.SEVERE, null, ex);
         } catch (ParseException e) {
             // TODO Auto-generated catch block
             e.printStackTrace();

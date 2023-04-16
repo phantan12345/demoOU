@@ -341,7 +341,14 @@ public class employeeController implements Initializable {
 
     public void addCus() throws SQLException {
         String name = txtFullName.getText();
-        String birthDay = dpBirthDay.getValue().format(formatter);
+        String birthDay;
+        try{
+        birthDay = dpBirthDay.getValue().format(formatter);
+        }
+        catch(Exception e){
+            checkText.checkEmpty(-1);
+            return;
+        }
         String phone = txtPhoneCus.getText();
         if (checkText.checkEmpty(birthDay) || checkText.checkEmpty(name)
                 || checkText.checkEmpty(phone) || checkText.checkPhone(phone) || customerServices.checkCus(phone)) {

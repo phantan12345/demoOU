@@ -35,9 +35,9 @@ public class CustomerTester {
 
     @Test
     public void testGetCus() {
-        String phone= "0377264480";
+        String phone = "0377264480";
         try {
-            c=cS.getCus(phone);
+            c = cS.getCus(phone);
         } catch (SQLException ex) {
             Logger.getLogger(CustomerTester.class.getName()).log(Level.SEVERE, null, ex);
         }

@@ -14,7 +14,6 @@ tan\pojo\bill.class
 tan\pojo\product.class
 tan\services\Product_billServices.class
 tan\oumarket\ChangePassword.class
-tan\pojo\user.class
 tan\services\BillServices.class
 setting\SwitchPage.class
 setting\setting.class

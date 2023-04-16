@@ -29,13 +29,16 @@ import tan.pojo.product_bill;
  * @author ADMIN
  */
 public class ProductServices {
+
     Info in = new Info();
+    Product_billServices pb = new Product_billServices();
+
     public List<product> getProducts() throws SQLException {
         List<product> ds = new ArrayList<>();
         try (Connection conn = JdbcUtils.getConn()) {
             Statement stm = conn.createStatement();
 
-                ResultSet rs = stm.executeQuery("SELECT * FROM product");
+            ResultSet rs = stm.executeQuery("SELECT * FROM product");
             while (rs.next()) {
                 product p = new product(
                         rs.getString("id"),
@@ -54,11 +57,9 @@ public class ProductServices {
 
     public boolean addProduct(product p) throws SQLException {
         try (Connection conn = JdbcUtils.getConn()) {
-
             conn.setAutoCommit(false);
             String sql = "INSERT INTO product(id,barcode,name,type,price,status,idPr) VALUES( ?,?, ?,?,?,?,?)";
             PreparedStatement stm = conn.prepareCall(sql);
-
             stm.setString(1, p.getId());
             stm.setString(2, p.getBarcode());
             stm.setString(3, p.getName());
@@ -79,13 +80,16 @@ public class ProductServices {
 
     }
 
-    public Boolean deleteProduct(String p) throws SQLException {
+    public void deleteProduct(String id) throws SQLException {
+        pb.loadProduct_bill(id);
         try (Connection conn = JdbcUtils.getConn()) {
-            String sql = "DELETE FORM product where id=?";
+            String sql = "DELETE FROM product where id=?";
             PreparedStatement stm = conn.prepareCall(sql);
-
-            stm.setString(1, p);
-            return stm.executeUpdate() > 0;
+            stm.setString(1, id);
+            stm.executeUpdate();
+            in.infoBox("Success", "Delete Product", "1");
+        } catch (Exception e) {
+            in.infoBox("No Success", "Delete Product", "-1");
         }
 
     }

@@ -35,7 +35,6 @@ import setting.Info;
 import setting.Singleton;
 import setting.SwitchPage;
 import tan.pojo.employee;
-import tan.pojo.user;
 import tan.services.employeeServices;
 
 /**

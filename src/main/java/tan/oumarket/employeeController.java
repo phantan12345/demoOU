@@ -67,6 +67,7 @@ import tan.services.BillServices;
 import tan.services.CustomerServices;
 import tan.services.ProductServices;
 import tan.services.Product_billServices;
+import tan.services.promotionServices;
 //import net.sf.jasperreports.engine.JasperCompileManager;
 //import net.sf.jasperreports.engine.JasperFillManager;
 //import net.sf.jasperreports.engine.JasperPrint;
@@ -248,7 +249,7 @@ public class employeeController implements Initializable {
     Info info = new Info();
     product_bill pb;
     String idcus=null;
-
+    promotionServices pS=new promotionServices();
     public void addBill() throws SQLException {
         String code = txtProductID.getText();
         ProductServices bProductServices=new ProductServices();
@@ -260,6 +261,8 @@ public class employeeController implements Initializable {
         pb = new product_bill(p.getName(), p.getType(), p.getPrice(), orderQuantity.getValue());
         pb.setIdProduct(p.getId());
         promotion pro = getPromotion(p.getIdKM());
+        if(pS.checkActive(pro))
+            pro.setDiscount(0);
         if (updateAmount(p.getId(), pro.getDiscount())) {
             dspb.add(pb);
         }
@@ -302,7 +305,6 @@ public class employeeController implements Initializable {
         Product_billServices pdServices = new Product_billServices();
         bill b = new bill((int) (ft * percent));
         BillServices bs = new BillServices();
-        System.out.println(idcus);
         bs.saveBill(b,idcus);
         for (product_bill p : dspb) {
             p.setIdBill(b.getId());

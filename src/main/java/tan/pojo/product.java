@@ -68,7 +68,6 @@ public class product {
     }
     
     public product() {
-        this.name  ="k"   ;
     }
     
     

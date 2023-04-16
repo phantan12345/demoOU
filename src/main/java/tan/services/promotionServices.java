@@ -14,7 +14,7 @@ import tan.pojo.product;
 import tan.pojo.promotion;
 
 public class promotionServices {
-
+    
     public List<promotion> getPromotion() throws SQLException {
         List<promotion> ds = new ArrayList<>();
         try (Connection conn = JdbcUtils.getConn()) {
@@ -85,7 +85,7 @@ public class promotionServices {
         }  
     }
 
-
+    
     public boolean deletePromotion(String p) throws SQLException{
         try(Connection conn=JdbcUtils.getConn()){
             String sql="DELETE FROM promotion where id=?";
@@ -100,9 +100,7 @@ public class promotionServices {
     public boolean updatePromotion(promotion p) throws SQLException{
         try(Connection conn=JdbcUtils.getConn()){
             String sql="UPDATE promotion set discount=?,date_start=?,date_end=? where id=?";
-
             PreparedStatement stm=conn.prepareCall(sql);
-
             stm.setInt(1, p.getDiscount());
             stm.setDate(2, p.getStar());
             stm.setDate(3, p.getEnd());
@@ -128,7 +126,12 @@ public class promotionServices {
            return stm.executeUpdate()>0;
         }
     }
-
+    
+    public boolean checkActive(promotion pr){
+        if(pr.getAative()==1)
+            return true;
+        return false;
+    }
 
 
 

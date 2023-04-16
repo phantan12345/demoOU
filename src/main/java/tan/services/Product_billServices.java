@@ -16,6 +16,7 @@ import tan.pojo.product_bill;
  * @author admin
  */
 public class Product_billServices {
+    
     public void saveProduct_bill(ObservableList<product_bill> dspb ) throws SQLException{
         String sql = "INSERT INTO billdetail values(?,?,?,?,?);";
         Connection connect = JdbcUtils.getConn();
@@ -28,5 +29,14 @@ public class Product_billServices {
                     prepare.setString(5, pb.getIdBill());
                     prepare.executeUpdate();
         }
+    }
+    
+    public void loadProduct_bill(String idPro) throws SQLException{
+        String sql = "UPDATE billdetail SET idPro = ? WHERE idPro = ?;";
+        Connection connect = JdbcUtils.getConn();
+        PreparedStatement prepare = connect.prepareStatement(sql);
+        prepare.setString(1, null);
+        prepare.setString(2, idPro);
+        prepare.executeUpdate();
     }
 }

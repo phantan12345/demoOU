@@ -13,9 +13,12 @@ import java.util.UUID;
  * @author admin
  */
 public class bill {
-     private String id;
+
+    private String id;
     private String payDate;
     private Integer total;
+    private Integer cash;
+    private Integer excessMoney;
 
     {
         setId(UUID.randomUUID().toString());
@@ -70,7 +73,4 @@ public class bill {
         this.total = total;
     }
 
-    
-
 }
-

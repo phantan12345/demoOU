@@ -1,6 +1,0 @@
-# Created at 2023-04-13T09:07:57.110
-Corrupted channel by directly writing to native stream in forked JVM 1. Stream 'Error occurred during initialization of boot layer'.
-
-# Created at 2023-04-13T09:07:57.121
-Corrupted channel by directly writing to native stream in forked JVM 1. Stream 'java.lang.LayerInstantiationException: Class loader (instance of): 'app' tried to define prohibited package name: java'.
-

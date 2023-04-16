@@ -70,13 +70,20 @@ public class employeeServices {
         }
     }
 
-    public boolean deleteEmployee(String p) throws SQLException {
+    public void deleteEmployee(String p) throws SQLException {
         try (Connection conn = JdbcUtils.getConn()) {
-            String sql = "DELETE FROM employee where id=?";
+            String sql = "UPDATE employee SET idBr = NULL WHERE id = ?";
             PreparedStatement stm = conn.prepareCall(sql);
-
             stm.setString(1, p);
-            return stm.executeUpdate() > 0;
+            stm.executeUpdate();
+            sql = "DELETE FROM employee where id=?;";
+            stm = conn.prepareCall(sql);
+            stm.setString(1, p);
+            stm.executeUpdate();
+            in.infoBox("Success", "Delete Employee", "1");
+
+        } catch (Exception e) {
+            in.infoBox("No Success", "Delete Employee", "-1");
         }
     }
 

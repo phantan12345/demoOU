@@ -462,8 +462,9 @@ public class adminController implements Initializable {
 
     public void addProduct(ActionEvent evt) throws SQLException {
         String km = "";
-        if (ch.checkEmpty(txtproductName.getText()) || ch.checkEmpty(txtBarcode.getText()) || ch.checkEmpty(txtproductStatus.getText())
-                || ch.checkEmpty(productType.getSelectionModel().getSelectedIndex()) || ch.checkEmpty(txtproductprice.getText())) {
+        if (ch.checkEmpty(txtproductName.getText()) || ch.checkEmpty(txtproductStatus.getText())
+                || ch.checkEmpty(productType.getSelectionModel().getSelectedIndex()) || ch.checkEmpty(txtproductprice.getText())
+                || ch.checkEmpty(txtBarcode.getText()) || ch.checkBarcode(txtBarcode.getText())) {
             return;
         }
         if (cbPromotion.getSelectionModel().getSelectedIndex() < 0) {
@@ -484,19 +485,23 @@ public class adminController implements Initializable {
                 Info.infoBox("successfully add", "Message", "1");
             }
         }
-
     }
 
     public void deleteProduct(ActionEvent evt) throws SQLException {
-        try {
-            if (product.deleteProduct(productFD_tableView.getSelectionModel().getSelectedItem().getId())) {
-                this.loadProduct(null);
-                Info.infoBox("successfully delete", "Message", "1");
-
-            }
-        } catch (Exception e) {
-            Info.infoBox("Please fill all blank fields", "Error Message", "2");
-        }
+        String id = productFD_tableView.getSelectionModel().getSelectedItem().getId();
+        String name = productFD_tableView.getSelectionModel().getSelectedItem().getName();
+        System.out.print(id);
+        product.deleteProduct(id);
+        this.loadProduct(null);
+//        try {
+//            if (product.deleteProduct(id, name)) {
+//                this.loadProduct(null);
+//                Info.infoBox("successfully delete", "Message", "1");
+//
+//            }
+//        } catch (Exception e) {
+//            Info.infoBox("No Success", "Error Message", "2");
+//        }
 
     }
 
@@ -591,8 +596,9 @@ public class adminController implements Initializable {
     // branch
     public void addBranch(ActionEvent evt) throws SQLException {
         try {
-            if(ch.checkEmpty(branchFD_txtbranchName.getText())||ch.checkEmpty(branchFD_txtbranchAddress.getText()))
+            if (ch.checkEmpty(branchFD_txtbranchName.getText()) || ch.checkEmpty(branchFD_txtbranchAddress.getText())) {
                 return;
+            }
             branch b = new branch(branchFD_txtbranchName.getText(), branchFD_txtbranchAddress.getText());
             if (branch.addBranch(b)) {
                 this.loadBranch(null);
@@ -644,7 +650,7 @@ public class adminController implements Initializable {
     public void addEmployee(ActionEvent evt) throws SQLException {
         int ac = 0;
         if (ch.checkEmpty(employee_txtname.getText()) || ch.checkEmpty(employee_txtphone.getText())
-                || ch.checkEmpty(employee_cbbranch.getSelectionModel().getSelectedIndex() )) {
+                || ch.checkEmpty(employee_cbbranch.getSelectionModel().getSelectedIndex())) {
             return;
         }
         String br = employee_cbbranch.getSelectionModel().getSelectedItem().getId();
@@ -661,14 +667,12 @@ public class adminController implements Initializable {
     }
 
     public void deleteEmployee(ActionEvent evt) throws SQLException {
-        if (employee.deleteEmployee((employeeFD_tableview.getSelectionModel().getSelectedItem()).getId())) {
-            this.loadEmoploye(null);
-            Info.infoBox("successfully delete", "Message", "1");
-
-        } else {
-            Info.infoBox("Please fill all blank fields", "Error Message", "2");
+        try {
+            employee.deleteEmployee((employeeFD_tableview.getSelectionModel().getSelectedItem()).getId());
+        } catch (Exception exception) {
+            Info.infoBox("Failed", "Delete Employee", "-1");
         }
-
+        this.loadEmoploye(null);
     }
 
     public void updateEmployee(ActionEvent evt) throws SQLException {
@@ -704,8 +708,9 @@ public class adminController implements Initializable {
             ch.checkEmpty(-1);
             return;
         }
-        if(ch.checkEmpty(promotionFD_txtDiscount.getText())||ch.checkEmpty(start)||ch.checkEmpty(end))
+        if (ch.checkEmpty(promotionFD_txtDiscount.getText()) || ch.checkEmpty(start) || ch.checkEmpty(end)) {
             return;
+        }
         try {
             promotion b = new promotion(Integer.parseInt(promotionFD_txtDiscount.getText()), start, end, 1);
 

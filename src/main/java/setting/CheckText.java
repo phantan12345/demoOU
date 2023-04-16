@@ -38,7 +38,13 @@ public class CheckText {
         }
         return false;
     }
-
+    public boolean checkBarcode(String bar){
+        if (bar.matches("\\d{9}")) {
+            return false;
+        }
+        i.infoBox("Invalid Barcode", "Barcode", "0");
+        return true;
+    }
     public boolean checkPhone(String phone) {
         if (phone.matches("\\d{10}")) {
             return false;

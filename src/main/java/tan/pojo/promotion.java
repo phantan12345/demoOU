@@ -107,6 +107,13 @@ public class promotion {
     @Override
     public String toString() {
       
-        return String.valueOf(this.discount);
+        return String.valueOf(this.getDiscount());
+    }
+
+    /**
+     * @param discount the discount to set
+     */
+    public void setDiscount(int discount) {
+        this.discount = discount;
     }
 }

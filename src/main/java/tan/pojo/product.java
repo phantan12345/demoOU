@@ -38,16 +38,6 @@ public class product {
         this.status=status;
         this.idKM=km_id;
        }
-
-       public product( String id,String bar,String name,String type,int price,int status,String km_id){
-        this.id=id;
-        this.barcode=bar;
-        this.name=name;
-        this.type=type;
-        this.price=price;
-        this.status=status;
-        this.idKM=km_id;
-       }
        public product( String name,String type,int price,int status,String km_id,String bar){
         this.id=id;
         this.name=name;
@@ -78,7 +68,6 @@ public class product {
     }
     
     public product() {
-        this.name  ="k"   ;
     }
     
     

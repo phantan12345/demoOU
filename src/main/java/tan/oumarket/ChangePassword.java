@@ -45,8 +45,8 @@ public class ChangePassword {
             if(password1.getText().equals(password2.getText()) )
             {
                 Singleton singleton = Singleton.getInstance();
-                in.infoBox(String.valueOf(singleton.getUserID()), "Information Message", "1");
-                String sql = "UPDATE user set password = ? WHERE id = ?";
+                in.infoBox(String.valueOf(singleton.getName()), "Information Message", "1");
+                String sql = "UPDATE employee set password = ? WHERE id = ?";
                 prepare = connect.prepareStatement(sql);
                 prepare.setString(1, password1.getText());
                 // Lấy đối tượng Singleton

@@ -12,27 +12,31 @@ import java.util.UUID;
  * @author admin
  */
 public class customer {
+
     private String id;
     private String fullName;
     private String birthDay;
-    private int phoneNumber;
+    private String phoneNumber;
+
     {
-       id=UUID.randomUUID().toString();
+        id = UUID.randomUUID().toString();
     }
-    public customer( String fullName, String birthDay, int phoneNumber) {
+
+    public customer(String fullName, String birthDay, String phoneNumber) {
         this.fullName = fullName;
         this.birthDay = birthDay;
         this.phoneNumber = phoneNumber;
     }
 
-    
-    
-    
-    
+    public customer(String idString, String fullName, String birthDay, String phoneNumber) {
+        this.id = idString;
+        this.fullName = fullName;
+        this.birthDay = birthDay;
+        this.phoneNumber = phoneNumber;
+    }
+
     public customer() {
     }
-    
-    
 
     /**
      * @return the id
@@ -65,7 +69,6 @@ public class customer {
     /**
      * @return the birthDay
      */
-    
     public String getBirthDay() {
         return birthDay;
     }
@@ -80,16 +83,15 @@ public class customer {
     /**
      * @return the phoneNumber
      */
-    public int getPhoneNumber() {
+    public String getPhoneNumber() {
         return phoneNumber;
     }
 
     /**
      * @param phoneNumber the phoneNumber to set
      */
-    public void setPhoneNumber(int phoneNumber) {
+    public void setPhoneNumber(String phoneNumber) {
         this.phoneNumber = phoneNumber;
     }
-    
-    
+
 }

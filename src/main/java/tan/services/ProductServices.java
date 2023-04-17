@@ -19,6 +19,7 @@ import javafx.collections.ObservableList;
 import javafx.scene.chart.BarChart;
 import javafx.scene.control.Alert;
 import javafx.scene.control.Alert.AlertType;
+import setting.Info;
 import setting.JdbcUtils;
 import tan.pojo.product;
 import tan.pojo.product_bill;
@@ -29,6 +30,9 @@ import tan.pojo.product_bill;
  */
 public class ProductServices {
 
+    Info in = new Info();
+    Product_billServices pb = new Product_billServices();
+
     public List<product> getProducts() throws SQLException {
         List<product> ds = new ArrayList<>();
         try (Connection conn = JdbcUtils.getConn()) {
@@ -37,13 +41,13 @@ public class ProductServices {
             ResultSet rs = stm.executeQuery("SELECT * FROM product");
             while (rs.next()) {
                 product p = new product(
-                      rs.getString("id"),
-                      rs.getString("name"),
-                      rs.getString("type"),
-                      rs.getInt("price"),
-                      rs.getInt("status"),
-                      rs.getString("idPr"),
-                      rs.getString("barcode")
+                        rs.getString("id"),
+                        rs.getString("name"),
+                        rs.getString("type"),
+                        rs.getInt("price"),
+                        rs.getInt("status"),
+                        rs.getString("idPr"),
+                        rs.getString("barcode")
                 );
                 ds.add(p);
             }
@@ -53,20 +57,16 @@ public class ProductServices {
 
     public boolean addProduct(product p) throws SQLException {
         try (Connection conn = JdbcUtils.getConn()) {
-
             conn.setAutoCommit(false);
-            String sql = "INSERT INTO product(id,barcode,name,type,price,status,idPr) VALUES(?,?,?,?,?,?,?)";
+            String sql = "INSERT INTO product(id,barcode,name,type,price,status,idPr) VALUES( ?,?, ?,?,?,?,?)";
             PreparedStatement stm = conn.prepareCall(sql);
-
-          stm.setString(1, p.getId());
-          stm.setString(2, p.getBarcode());
-          stm.setString(3, p.getName());
-          stm.setString(4, p.getType());
-          stm.setInt(5, p.getPrice());
-          stm.setInt(6, p.getStatus());
-          stm.setString(7, p.getIdKM());
-
-
+            stm.setString(1, p.getId());
+            stm.setString(2, p.getBarcode());
+            stm.setString(3, p.getName());
+            stm.setString(4, p.getType());
+            stm.setInt(5, p.getPrice());
+            stm.setInt(6, p.getStatus());
+            stm.setString(7, p.getIdKM());
 
             stm.executeUpdate();
 
@@ -80,14 +80,33 @@ public class ProductServices {
 
     }
 
-    public Boolean deleteProduct(String p) throws SQLException {
+    public void deleteProduct(String id) throws SQLException {
+        pb.loadProduct_bill(id);
         try (Connection conn = JdbcUtils.getConn()) {
-            String sql = "DELETE FORM product where id=?";
+            String sql = "DELETE FROM product where id=?";
             PreparedStatement stm = conn.prepareCall(sql);
+            stm.setString(1, id);
+            stm.executeUpdate();
+            in.infoBox("Success", "Delete Product", "1");
+        } catch (Exception e) {
+            in.infoBox("No Success", "Delete Product", "-1");
+        }
 
-            stm.setString(1, p);
-            return stm.executeUpdate()>0;        }
-        
+    }
+
+    public boolean checkBarcode(String barcode) throws SQLException {
+        try (Connection conn = JdbcUtils.getConn()) {
+            String sql = "SELECT * FROM product WHERE barcode = ?";
+            Connection connect = JdbcUtils.getConn();
+            PreparedStatement prepare = connect.prepareStatement(sql);
+            prepare.setString(1, barcode);
+            ResultSet rs = prepare.executeQuery();
+            if (rs.next()) {
+                return false;
+            }
+        }
+        in.infoBox("Barcodes don't exist", "Check Barcode", "0");
+        return true;
     }
 
     public product getProduct(String barcode) throws SQLException {
@@ -108,7 +127,7 @@ public class ProductServices {
                         rs.getInt("price"),
                         rs.getInt("status")
                 );
-                if (rs.getString("idPr") != null) {
+                if (rs.getString("idPr") == null) {
                     p.setIdKM(rs.getString("idPr"));
                 }
                 return p;
@@ -116,12 +135,12 @@ public class ProductServices {
             return c;
         }
     }
-    
-      public boolean updateProduct(product p) throws SQLException{
-        try(Connection conn=JdbcUtils.getConn()){
-            String sql="UPDATE product set id=?,name=?,type=?,price=?,status=?,idPr=? where id=?";
 
-            PreparedStatement stm=conn.prepareCall(sql);
+    public boolean updateProduct(product p) throws SQLException {
+        try (Connection conn = JdbcUtils.getConn()) {
+            String sql = "UPDATE product set id=?,name=?,type=?,price=?,status=?,idPr=? where id=?";
+
+            PreparedStatement stm = conn.prepareCall(sql);
 
             stm.setString(1, p.getId());
             stm.setString(2, p.getName());
@@ -130,7 +149,6 @@ public class ProductServices {
             stm.setInt(5, p.getStatus());
             stm.setString(6, p.getIdKM());
             stm.setString(7, p.getId());
-
 
             return stm.executeUpdate() > 0;
         }

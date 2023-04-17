@@ -9,6 +9,7 @@ public class Singleton {
     private static Singleton instance;
     private String userID ;
     private String name ;
+    private int cash;
 
 
 

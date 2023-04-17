@@ -73,4 +73,32 @@ public class bill {
         this.total = total;
     }
 
+    /**
+     * @return the cash
+     */
+    public Integer getCash() {
+        return cash;
+    }
+
+    /**
+     * @param cash the cash to set
+     */
+    public void setCash(Integer cash) {
+        this.cash = cash;
+    }
+
+    /**
+     * @return the excessMoney
+     */
+    public Integer getExcessMoney() {
+        return excessMoney;
+    }
+
+    /**
+     * @param excessMoney the excessMoney to set
+     */
+    public void setExcessMoney(Integer excessMoney) {
+        this.excessMoney = excessMoney;
+    }
+
 }

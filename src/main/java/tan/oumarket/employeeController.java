@@ -230,6 +230,9 @@ public class employeeController implements Initializable {
     @FXML
     private TableView<customer> tbv_Cus;
 
+    @FXML
+    private TextField txtCash;
+    
     private Connection connect;
     private PreparedStatement prepare;
     private Statement statement;
@@ -248,12 +251,13 @@ public class employeeController implements Initializable {
     CheckText checkText = new CheckText();
     Info info = new Info();
     product_bill pb;
-    String idcus=null;
-    promotionServices pS=new promotionServices();
+    String idcus = null;
+    promotionServices pS = new promotionServices();
+
     public void addBill() throws SQLException {
         String code = txtProductID.getText();
-        ProductServices bProductServices=new ProductServices();
-        if (checkText.checkEmpty(code)||bProductServices.checkBarcode(code)) {
+        ProductServices bProductServices = new ProductServices();
+        if (checkText.checkEmpty(code) || bProductServices.checkBarcode(code)) {
             return;
         }
         pds = new ProductServices();
@@ -261,8 +265,9 @@ public class employeeController implements Initializable {
         pb = new product_bill(p.getName(), p.getType(), p.getPrice(), orderQuantity.getValue());
         pb.setIdProduct(p.getId());
         promotion pro = getPromotion(p.getIdKM());
-        if(pS.checkActive(pro))
+        if (pS.checkActive(pro)) {
             pro.setDiscount(0);
+        }
         if (updateAmount(p.getId(), pro.getDiscount())) {
             dspb.add(pb);
         }
@@ -289,7 +294,8 @@ public class employeeController implements Initializable {
         }
         Clear();
     }
-    public void Clear(){
+
+    public void Clear() {
         txtProductID.setText("");
         orderQuantity.getValueFactory().setValue(1);
         dspb.clear();
@@ -300,12 +306,18 @@ public class employeeController implements Initializable {
     }
 
     public void completeBill() throws SQLException {
-        if(info.conFir())
+        int funds=(int) (ft * percent);
+        if (dspb.size() == 0) {
+            info.infoBox("Bill Empty", "Bill", "-1");
             return;
+        }
+        if (info.conFir()||checkText.checkTotal(txtCash.getText(), funds)) {
+            return;
+        }
         Product_billServices pdServices = new Product_billServices();
         bill b = new bill((int) (ft * percent));
         BillServices bs = new BillServices();
-        bs.saveBill(b,idcus);
+        bs.saveBill(b, idcus);
         for (product_bill p : dspb) {
             p.setIdBill(b.getId());
         }
@@ -330,8 +342,9 @@ public class employeeController implements Initializable {
         }
         CustomerServices cs = new CustomerServices();
         customer c = cs.getCus(phone);
-        if(c.getPhoneNumber()!=null)
-            idcus=c.getId();
+        if (c.getPhoneNumber() != null) {
+            idcus = c.getId();
+        }
         LocalDate myLocalDate = LocalDate.now();
         DateTimeFormatter formatter = DateTimeFormatter.ofPattern("dd/MM/yyyy");
         String formattedDateTime = myLocalDate.format(formatter);
@@ -341,24 +354,35 @@ public class employeeController implements Initializable {
         fundsTotal();
     }
 
-    public void addCus() throws SQLException {
-        String name = txtFullName.getText();
-        String birthDay;
-        try{
-        birthDay = dpBirthDay.getValue().format(formatter);
+    public boolean old(DatePicker dp) {
+        int selectedYear = dp.getValue().getYear();
+        int currentYear = LocalDate.now().getYear();
+        if (currentYear - selectedYear <= 10) {
+            info.infoBox("Invalid birthDay", "birthDay", "-1");
+            return true;
         }
-        catch(Exception e){
+        return false;
+    }
+
+    public void addCus() throws SQLException {
+        String name = checkText.removeExtraSpaces(txtFullName.getText());
+        String birthDay;
+        try {
+            birthDay = dpBirthDay.getValue().format(formatter);
+        } catch (Exception e) {
             checkText.checkEmpty(-1);
             return;
         }
         String phone = txtPhoneCus.getText();
         if (checkText.checkEmpty(birthDay) || checkText.checkEmpty(name)
-                || checkText.checkEmpty(phone) || checkText.checkPhone(phone) || customerServices.checkCus(phone)) {
+                || checkText.checkEmpty(phone) || checkText.checkPhone(phone) || customerServices.checkCus(phone)
+                || old(dpBirthDay) || checkText.containsSpecialCharacter(name)) {
             return;
         }
         customer cus = new customer(name, birthDay, phone);
         customerServices.saveCus(cus);
         cusList.add(cus);
+        info.infoBox("ADD SUCCES", "Check Member", "1");
         loadTableCus();
     }
 
@@ -448,6 +472,9 @@ public class employeeController implements Initializable {
     }
 
     public void logout() throws IOException {
+        if (info.conFir()) {
+            return;
+        }
         logoutBtn.getScene().getWindow().hide();
         Parent root = FXMLLoader.load(getClass().getResource("login.fxml"));
         sw = new SwitchPage(root);
@@ -502,6 +529,8 @@ public class employeeController implements Initializable {
         txtBillAbate.setFocusTraversable(false);
         txtFundsTotal.setEditable(false);
         txtFundsTotal.setFocusTraversable(false);
+        dpBirthDay.setFocusTraversable(false);
+        dpBirthDay.setEditable(false);
     }
 
 }

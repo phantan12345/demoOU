@@ -81,7 +81,7 @@ public class LoginController implements Initializable {
                 singleton.setUserID(e.getId());
                 singleton.setName(e.getName());
                 if (password.getText().length() >= 8) {
-                    info.infoBox("Successfully Login!", "Information Message", "1");
+                    info.mess();
                     // TO HIDE YOUR LOGIN FORM
                     loginBtn.getScene().getWindow().hide();
                     if (e.getActive() == 0) {

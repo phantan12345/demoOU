@@ -62,7 +62,6 @@ public class CustomerServices {
                 return true;
 
             };
-            in.infoBox("ADD SUCCES", "Check Member", "1");
             return false;
         }
     }

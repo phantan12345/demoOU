@@ -123,4 +123,31 @@ public class employeeServices {
         }
 
     }
+    public boolean checkPhone(String phone) throws SQLException {
+        try (Connection conn = JdbcUtils.getConn()) {
+            String sql = "SELECT * FROM employee WHERE phoneNumber = ?";
+            Connection connect = JdbcUtils.getConn();
+            PreparedStatement prepare = connect.prepareStatement(sql);
+            prepare.setString(1, phone);
+            ResultSet rs = prepare.executeQuery();
+            if (rs.next()) {
+                in.infoBox("Registered phone number", "Check Member", "");
+                return true;
+
+            };
+            return false;
+        }
+    }
+    
+    public Boolean checkData(String p) throws SQLException {
+        try (Connection conn = JdbcUtils.getConn()) {
+            String sql = "UPDATE employee set idBr=? where idBr =?";
+            PreparedStatement stm = conn.prepareCall(sql);
+            
+            stm.setString(1, null);
+            stm.setString(2, p);
+            return stm.executeUpdate() > 0;
+        }
+
+    }
 }

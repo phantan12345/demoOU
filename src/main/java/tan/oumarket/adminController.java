@@ -464,7 +464,12 @@ public class adminController implements Initializable {
         String km = "";
         if (ch.checkEmpty(txtproductName.getText()) || ch.checkEmpty(txtproductStatus.getText())
                 || ch.checkEmpty(productType.getSelectionModel().getSelectedIndex()) || ch.checkEmpty(txtproductprice.getText())
-                || ch.checkEmpty(txtBarcode.getText()) || ch.checkBarcode(txtBarcode.getText())) {
+                || ch.checkEmpty(txtBarcode.getText()) || ch.checkBarcode(txtBarcode.getText())
+                || ch.checkEmpty(ch.removeExtraSpaces(txtproductName.getText()))
+                || ch.containsSpecialCharacter(txtproductStatus.getText())
+                || ch.containsSpecialCharacter(txtproductprice.getText())
+                || ch.containsSpecialCharacter(txtBarcode.getText())
+                || ch.checkValue(Integer.parseInt(txtproductprice.getText()), 0)) {
             return;
         }
         if (cbPromotion.getSelectionModel().getSelectedIndex() < 0) {
@@ -595,7 +600,16 @@ public class adminController implements Initializable {
 
     // branch
     public void addBranch(ActionEvent evt) throws SQLException {
-        try {
+        
+            if( ch.containsSpecialCharacter(branchFD_txtbranchName.getText())||
+                    ch.checkEmpty(ch.removeExtraSpaces(branchFD_txtbranchName.getText()))||
+                    ch.checkEmpty(branchFD_txtbranchName.getText())||
+                    
+                   ch.containsSpecialCharacter(branchFD_txtbranchAddress.getText())||
+                    ch.checkEmpty(ch.removeExtraSpaces(branchFD_txtbranchAddress.getText()))||
+                    ch.checkEmpty(branchFD_txtbranchAddress.getText()) ){
+                return;
+            }
             if (ch.checkEmpty(branchFD_txtbranchName.getText()) || ch.checkEmpty(branchFD_txtbranchAddress.getText())) {
                 return;
             }
@@ -605,13 +619,12 @@ public class adminController implements Initializable {
                 Info.infoBox("successfully add", "Message", "1");
 
             }
-        } catch (Exception e) {
-            Info.infoBox("Please fill all blank fields", "Error Message", "2");
-        }
+      
     }
 
     public void deleteBranch(ActionEvent evt) throws SQLException {
-        if (branch.deleteBranch((branchFD_tableView.getSelectionModel().getSelectedItem()).getId())) {
+        if (employee.checkData((branchFD_tableView.getSelectionModel().getSelectedItem()).getId()) ||
+        branch.deleteBranch((branchFD_tableView.getSelectionModel().getSelectedItem()).getId()) ) {
             this.loadBranch(null);
             Info.infoBox("successfully delete", "Message", "1");
 
@@ -621,6 +634,7 @@ public class adminController implements Initializable {
         }
 
     }
+
 
     public void selectBranch() {
         branch p = branchFD_tableView.getSelectionModel().getSelectedItem();
@@ -650,18 +664,23 @@ public class adminController implements Initializable {
     public void addEmployee(ActionEvent evt) throws SQLException {
         int ac = 0;
         if (ch.checkEmpty(employee_txtname.getText()) || ch.checkEmpty(employee_txtphone.getText())
-                || ch.checkEmpty(employee_cbbranch.getSelectionModel().getSelectedIndex())) {
+                || ch.checkEmpty(employee_cbbranch.getSelectionModel().getSelectedIndex())
+                || employee.checkPhone(employee_txtphone.getText())
+                || ch.containsSpecialCharacter(employee_txtname.getText())
+                || ch.checkEmpty(ch.removeExtraSpaces(employee_txtname.getText()))
+                || ch.checkPhone(employee_txtphone.getText())) {
             return;
         }
+
         String br = employee_cbbranch.getSelectionModel().getSelectedItem().getId();
         if (employee_cbactive.isSelected()) {
             ac = 1;
         }
         employee b = new employee(employee_txtname.getText(), employee_txtphone.getText(), ac, br);
         if (employee.addEmployee(b)) {
-            this.loadEmoploye(null);
             Info.infoBox("successfully add", "Message", "1");
 
+            this.loadEmoploye(null);
         }
 
     }
@@ -679,15 +698,19 @@ public class adminController implements Initializable {
 
         try {
             employee p = employeeFD_tableview.getSelectionModel().getSelectedItem();
+            p.setName(employee_txtname.getText());
+            p.setPhone(employee_txtphone.getText());
+            p.setIdbr(employee_cbbranch.getSelectionModel().getSelectedItem().getId());
             if (employee_cbactive.isSelected()) {
                 p.setActive(1);
             } else {
                 p.setActive(0);
             }
+
             if (employee.updateEmployee(p)) {
                 this.loadEmoploye(null);
 
-                Info.infoBox("successfully delete", "Message", "1");
+                Info.infoBox("successfully update", "Message", "1");
 
             }
         } catch (Exception e) {
@@ -701,9 +724,16 @@ public class adminController implements Initializable {
     public void addPromotion(ActionEvent evt) throws SQLException, ParseException {
         Date start = null;
         Date end = null;
+
         try {
             start = Date.valueOf(this.promotionFD_dtStartdate.getValue());
             end = Date.valueOf(this.promotionFD_dtEnddate.getValue());
+            if (ch.checkDatepromotion(end, start) || ch.checkDatepromotionNow(end, start)
+                    || ch.checkValue(100, Integer.parseInt(promotionFD_txtDiscount.getText()))
+                    || ch.checkValue(Integer.parseInt(promotionFD_txtDiscount.getText()), 0)) {
+                return;
+            }
+
         } catch (Exception e) {
             ch.checkEmpty(-1);
             return;
@@ -716,7 +746,7 @@ public class adminController implements Initializable {
 
             if (promo.addPromotion(b)) {
                 this.loadPromotion(null);
-                Info.infoBox("successfully delete", "Message", "1");
+                Info.infoBox("successfully add", "Message", "1");
 
             }
         } catch (Exception e) {
@@ -739,6 +769,21 @@ public class adminController implements Initializable {
 
         try {
             promotion p = promotionFD_tableview.getSelectionModel().getSelectedItem();
+            p.setDiscount(Integer.parseInt(promotionFD_txtDiscount.getText()));
+            p.setStar(Date.valueOf(promotionFD_dtStartdate.getValue()));
+            p.setStar(Date.valueOf(promotionFD_dtEnddate.getValue()));
+
+            if (ch.checkDatepromotion(p.getEnd(), p.getStar())
+                    || ch.checkDatepromotionNow(p.getEnd(), p.getStar())
+                    || ch.checkValue(100, p.getDiscount())
+                    || ch.checkValue(p.getDiscount(), 0)) {
+                return;
+            }
+            if(promo.checkPromotion(p)){
+                 Info.infoBox("Promotion is available", "CUSTOMER'S NAME", "-1");
+
+                return;
+            }
 
             if (promo.updatePromotion(p)) {
                 this.loadPromotion(null);
@@ -746,6 +791,7 @@ public class adminController implements Initializable {
                 Info.infoBox("successfully update", "Message", "1");
 
             }
+
         } catch (Exception e) {
             Info.infoBox("Please fill all blank fields", "Error Message", "2");
 

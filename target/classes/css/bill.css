@@ -1,0 +1,22 @@
+/*
+Click nbfs://nbhost/SystemFileSystem/Templates/Licenses/license-default.txt to change this license
+Click nbfs://nbhost/SystemFileSystem/Templates/Other/CascadeStyleSheet.css to edit this template
+*/
+/* 
+    Created on : Apr 17, 2023, 5:12:25 PM
+    Author     : admin
+*/
+
+.main-form{
+    -fx-background-color: linear-gradient(to bottom right, #25bcbf, #3796a7);
+    -fx-border-color: #000;
+    -fx-border-width: .4px .4px .2px .4px;
+     -fx-background-radius: 4px;
+}
+
+.table{
+    -fx-background-color: #efefef;
+    -fx-border-color: #000;
+    -fx-border-width: .2px .4px .4px .4px;
+     -fx-background-radius: 4px;
+}

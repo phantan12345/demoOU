@@ -8,13 +8,14 @@ import java.sql.Statement;
 
 import java.sql.PreparedStatement;
 import java.sql.ResultSet;
+import setting.Info;
 
 import setting.JdbcUtils;
 import tan.pojo.product;
 import tan.pojo.promotion;
 
 public class promotionServices {
-    
+    Info in=new Info();
     public List<promotion> getPromotion() throws SQLException {
         List<promotion> ds = new ArrayList<>();
         try (Connection conn = JdbcUtils.getConn()) {
@@ -99,7 +100,7 @@ public class promotionServices {
 
     public boolean updatePromotion(promotion p) throws SQLException{
         try(Connection conn=JdbcUtils.getConn()){
-            String sql="UPDATE promotion set discount=?,date_start=?,date_end=? where id=?";
+            String sql="UPDATE promotion set discount=?,startDate=?,endDate=? where id=?";
             PreparedStatement stm=conn.prepareCall(sql);
             stm.setInt(1, p.getDiscount());
             stm.setDate(2, p.getStar());
@@ -111,6 +112,28 @@ public class promotionServices {
             return stm.executeUpdate() > 0;
         }
 
+    }
+    
+     public boolean checkPromotion(promotion p) throws SQLException{
+ 
+        
+         try (Connection conn = JdbcUtils.getConn()) {
+            String sql="SELECT * FROM promotion WHERE discount=? and startDate=? and endDate=?";
+            Connection connect = JdbcUtils.getConn();
+            PreparedStatement prepare = connect.prepareStatement(sql);
+            
+            prepare.setInt(1, p.getDiscount());
+            prepare.setDate(2, p.getStar());
+            prepare.setDate(3, p.getEnd());
+            
+            ResultSet rs = prepare.executeQuery();
+            if (rs.next()) {
+                in.infoBox("Registered phone number", "Check Member", "");
+                return true;
+
+            };
+            return false;
+        }
     }
 
  
@@ -127,12 +150,13 @@ public class promotionServices {
         }
     }
     
+  
+    
     public boolean checkActive(promotion pr){
         if(pr.getAative()==1)
             return true;
         return false;
     }
-
 
 
 }

@@ -5,6 +5,7 @@
 package setting;
 
 import java.sql.Date;
+import java.time.LocalDate;
 import javafx.scene.AccessibleAttribute;
 
 /**
@@ -80,11 +81,48 @@ public class CheckText {
 
     public boolean containsSpecialCharacter(String name) {
         String regex = "[!@#$%^&*()_+=\\[\\]{};':\"\\\\|,.<>\\/?]";
-        if(name.matches(".*" + regex + ".*")){
+        if (name.matches(".*" + regex + ".*")) {
             Info.infoBox("Name Contains Special Character", "CUSTOMER'S NAME", "-1");
             return true;
         }
         return false;
     }
 
+    public boolean checkQuantityOrder(String q) {
+        if (checkEmpty(q)) {
+            return true;
+        }
+        try {
+            Double d = Double.parseDouble(q);
+        }catch (Exception e){
+            Info.infoBox("Please enter the correct quantity", "Quantity", "-1");
+            return true;
+        }
+        return false;
+    }
+    public  boolean checkDatepromotion(Date d1,Date d2){
+        if(d1.compareTo(d2)<0){
+            Info.infoBox("wrong date", "CUSTOMER'S NAME", "-1");
+            return true;
+        }
+        return false;
+    }
+     public  boolean checkDatepromotionNow(Date d1,Date d2){
+        LocalDate date=LocalDate.now();
+        Date d=Date.valueOf(date);
+        if(d1.compareTo(d)<0 && d2.compareTo(d)<0){
+            Info.infoBox("wrong date now", "CUSTOMER'S NAME", "-1");
+            return true;
+        }
+        return false;
+     }
+     
+      public  boolean checkValue(int d1,int d2){
+      
+        if(d1<d2){
+            Info.infoBox("wrong value", "CUSTOMER'S NAME", "-1");
+            return true;
+        }
+        return false;
+     }
 }

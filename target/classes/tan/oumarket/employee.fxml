@@ -207,19 +207,17 @@
                                     <String fx:value="shadow" />
                                  </styleClass>
                                  <children>
-                                    <Label layoutX="37.0" layoutY="34.0" text="Barcode">
+                                    <Label layoutX="37.0" layoutY="20.0" text="Barcode">
                                        <font>
                                           <Font name="Tahoma" size="12.0" />
                                        </font>
                                     </Label>
-                                    <TextField fx:id="txtProductID" layoutX="37.0" layoutY="56.0" prefHeight="25.0" prefWidth="192.0" styleClass="textfield" stylesheets="@dashboardDesign.css" />
-                                    <Button fx:id="availableFD_addBtn" layoutX="28.0" layoutY="229.0" mnemonicParsing="false" onAction="#addBill" prefHeight="42.0" prefWidth="93.0" styleClass="add-btn" stylesheets="@dashboardDesign.css" text="Add" />
+                                    <TextField fx:id="txtProductID" layoutX="37.0" layoutY="42.0" prefHeight="25.0" prefWidth="192.0" styleClass="textfield" stylesheets="@dashboardDesign.css" />
                                     <Button fx:id="availableFD_updateBtn" layoutX="26.0" layoutY="279.0" mnemonicParsing="false" onAction="#completeBill" prefHeight="42.0" prefWidth="218.0" styleClass="update-btn" stylesheets="@dashboardDesign.css" text="Complete" />
                                     <Button fx:id="availableFD_clearBtn" layoutX="25.0" layoutY="329.0" mnemonicParsing="false" onAction="#ClearBill" prefHeight="42.0" prefWidth="220.0" styleClass="clear-btn" stylesheets="@dashboardDesign.css" text="Clear" />
-                                    <Button fx:id="deleteBtn" layoutX="151.0" layoutY="229.0" mnemonicParsing="false" onAction="#deleteBill" prefHeight="42.0" prefWidth="93.0" styleClass="delete-btn" stylesheets="@dashboardDesign.css" text="Delete" />
-                                    <TextField fx:id="txtPhone" layoutX="30.0" layoutY="126.0" prefHeight="25.0" prefWidth="137.0" promptText="Customer's Phone:" styleClass="textfield" stylesheets="@dashboardDesign.css" />
-                                    <Spinner fx:id="orderQuantity" layoutX="98.0" layoutY="91.0" onMouseClicked="#orderQuantity" prefHeight="25.0" prefWidth="130.0" />
-                                    <Label layoutX="39.0" layoutY="96.0" prefHeight="15.0" prefWidth="52.0" text="Quantity">
+                                    <TextField fx:id="txtPhone" layoutX="30.0" layoutY="167.0" prefHeight="25.0" prefWidth="137.0" promptText="Customer's Phone:" styleClass="textfield" stylesheets="@dashboardDesign.css" />
+                                    <Spinner fx:id="orderQuantity" layoutX="98.0" layoutY="77.0" onMouseClicked="#orderQuantity" prefHeight="25.0" prefWidth="130.0" />
+                                    <Label layoutX="39.0" layoutY="82.0" prefHeight="15.0" prefWidth="52.0" text="Quantity">
                                        <font>
                                           <Font name="Tahoma" size="12.0" />
                                        </font>
@@ -236,13 +234,15 @@
                                           <Font name="Tahoma" size="12.0" />
                                        </font>
                                     </Label>
-                                    <Button fx:id="checkBtn" layoutX="178.0" layoutY="125.0" mnemonicParsing="false" onAction="#checkPhone" prefHeight="29.0" prefWidth="64.0" styleClass="update-btn" stylesheets="@dashboardDesign.css" text="check " />
-                                    <TextField fx:id="txtCash" layoutX="27.0" layoutY="188.0" prefHeight="34.0" prefWidth="217.0" promptText="Cash" />
-                                    <Label layoutX="29.0" layoutY="162.0" text="Cash">
+                                    <Button fx:id="checkBtn" layoutX="178.0" layoutY="166.0" mnemonicParsing="false" onAction="#checkPhone" prefHeight="29.0" prefWidth="64.0" styleClass="update-btn" stylesheets="@dashboardDesign.css" text="check " />
+                                    <TextField fx:id="txtCash" layoutX="27.0" layoutY="229.0" prefHeight="34.0" prefWidth="217.0" promptText="Cash" />
+                                    <Label layoutX="29.0" layoutY="203.0" text="Cash">
                                        <font>
                                           <Font name="Tahoma" size="12.0" />
                                        </font>
                                     </Label>
+                                    <Button fx:id="availableFD_addBtn" layoutX="34.0" layoutY="118.0" mnemonicParsing="false" onAction="#addBill" prefHeight="42.0" prefWidth="93.0" styleClass="add-btn" stylesheets="@dashboardDesign.css" text="Add" />
+                                    <Button fx:id="deleteBtn" layoutX="149.0" layoutY="118.0" mnemonicParsing="false" onAction="#deleteBill" prefHeight="42.0" prefWidth="93.0" styleClass="delete-btn" stylesheets="@dashboardDesign.css" text="Delete" />
                                  </children>
                               </AnchorPane>
                               <AnchorPane layoutX="305.0" layoutY="15.0" prefHeight="525.0" prefWidth="568.0" stylesheets="@dashboardDesign.css">

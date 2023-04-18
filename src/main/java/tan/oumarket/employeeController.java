@@ -242,9 +242,9 @@ public class employeeController implements Initializable {
     private int abe;
     private double percent = 1;
     private CustomerServices customerServices = new CustomerServices();
-
-    private ObservableList<product_bill> dspb = FXCollections.observableArrayList();
     private ObservableList<customer> cusList = FXCollections.observableArrayList();
+
+    ObservableList<product_bill> dspb = FXCollections.observableArrayList();
     ProductServices pds;
     DateTimeFormatter formatter = DateTimeFormatter.ofPattern("dd/MM/yyyy");
     DecimalFormat decimalFormat = new DecimalFormat("#,###₫");
@@ -253,6 +253,7 @@ public class employeeController implements Initializable {
     product_bill pb;
     String idcus = null;
     promotionServices pS = new promotionServices();
+    Singleton singleton=Singleton.getInstance();
 
     public void addBill() throws SQLException {
         String code = txtProductID.getText();
@@ -296,7 +297,9 @@ public class employeeController implements Initializable {
     }
 
     public void Clear() {
+        txtPhone.setText("");
         txtProductID.setText("");
+        txtCash.setText("");
         orderQuantity.getValueFactory().setValue(1);
         dspb.clear();
         tbv_Product.getItems().clear();
@@ -305,7 +308,7 @@ public class employeeController implements Initializable {
         fundsTotal();
     }
 
-    public void completeBill() throws SQLException {
+    public void completeBill() throws SQLException, IOException {
         int funds=(int) (ft * percent);
         if (dspb.size() == 0) {
             info.infoBox("Bill Empty", "Bill", "-1");
@@ -320,10 +323,16 @@ public class employeeController implements Initializable {
         bs.saveBill(b, idcus);
         for (product_bill p : dspb) {
             p.setIdBill(b.getId());
+            singleton.getPdsList().add(p);
         }
+        b.setCash(Integer.parseInt(txtCash.getText()));
+        singleton.setB(b);
+//        singleton.setPdsList(dspb);
         pdServices.saveProduct_bill(dspb);
         pds.updateAmount(dspb);
         Clear();
+        Parent root = FXMLLoader.load(getClass().getResource("bill.fxml"));
+        sw = new SwitchPage(root);
     }
 
     public void fundsTotal() {

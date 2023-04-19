@@ -427,7 +427,6 @@ public class adminController implements Initializable {
 
     public void loadPromotion(String kw) throws ParseException, SQLException {
         List<promotion> listpromottion = promo.getPromotion();
-
         this.productFD_tableView.getItems().clear();
         this.promotionFD_tableview.setItems(FXCollections.observableList(listpromottion));
 
@@ -588,7 +587,6 @@ public class adminController implements Initializable {
 
     public void availableFDType() {
         List<String> listCat = new ArrayList<>();
-
         for (String data : categories) {
             listCat.add(data);
         }
@@ -752,6 +750,7 @@ public class adminController implements Initializable {
         } catch (Exception e) {
             Info.infoBox("Please fill all blank fields", "Error Message", "2");
         }
+        this.productFD_tableView.refresh();
     }
 
     public void deletePromotion(ActionEvent evt) throws SQLException, ParseException {

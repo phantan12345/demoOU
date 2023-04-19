@@ -127,9 +127,7 @@ public class ProductServices {
                         rs.getInt("price"),
                         rs.getInt("status")
                 );
-                if (rs.getString("idPr") == null) {
-                    p.setIdKM(rs.getString("idPr"));
-                }
+                p.setIdKM(rs.getString("idPr"));
                 return p;
             };
             return c;

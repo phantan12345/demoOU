@@ -55,7 +55,6 @@ public class promotion {
     id = UUID.randomUUID().toString();
 }
     private int discount;
-
     private Date star;
     private Date end;
     private int active;

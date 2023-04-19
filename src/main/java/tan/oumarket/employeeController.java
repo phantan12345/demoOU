@@ -232,7 +232,7 @@ public class employeeController implements Initializable {
 
     @FXML
     private TextField txtCash;
-    
+
     private Connection connect;
     private PreparedStatement prepare;
     private Statement statement;
@@ -253,7 +253,7 @@ public class employeeController implements Initializable {
     product_bill pb;
     String idcus = null;
     promotionServices pS = new promotionServices();
-    Singleton singleton=Singleton.getInstance();
+    Singleton singleton = Singleton.getInstance();
 
     public void addBill() throws SQLException {
         String code = txtProductID.getText();
@@ -265,13 +265,20 @@ public class employeeController implements Initializable {
         product p = pds.getProduct(txtProductID.getText());
         pb = new product_bill(p.getName(), p.getType(), p.getPrice(), orderQuantity.getValue());
         pb.setIdProduct(p.getId());
-        promotion pro = getPromotion(p.getIdKM());
+        promotion pro = pS.getPromotion(p.getIdKM());
+        System.out.println( pS.getPromotion(p.getIdKM()).getDiscount());
+        int discount = 0;
+        System.out.print(pro.getId());
+        System.out.print(pro.getAative());
+        System.out.print(pro.getDiscount());
         if (pS.checkActive(pro)) {
             pro.setDiscount(0);
         }
         if (updateAmount(p.getId(), pro.getDiscount())) {
             dspb.add(pb);
         }
+        System.out.print(pro.getAative());
+        System.out.print(pro.getDiscount());
         int price = Math.round((pb.getPrice() - pb.getPrice() * pro.getDiscount() / 100) * pb.getAmount());
         pb.setProPrice(price);
         this.tbv_Product.refresh();
@@ -309,12 +316,12 @@ public class employeeController implements Initializable {
     }
 
     public void completeBill() throws SQLException, IOException {
-        int funds=(int) (ft * percent);
+        int funds = (int) (ft * percent);
         if (dspb.size() == 0) {
             info.infoBox("Bill Empty", "Bill", "-1");
             return;
         }
-        if (info.conFir()||checkText.checkTotal(txtCash.getText(), funds)) {
+        if (info.conFir() || checkText.checkTotal(txtCash.getText(), funds)) {
             return;
         }
         Product_billServices pdServices = new Product_billServices();
@@ -435,27 +442,6 @@ public class employeeController implements Initializable {
             tbv_Product.setItems(dspb);
 
         }
-    }
-
-    //Get promotion
-    public promotion getPromotion(String id) throws SQLException {
-        connect = JdbcUtils.getConn();
-        String sql = "SELECT * FROM promotion WHERE id = ?";
-        Connection connect = JdbcUtils.getConn();
-        PreparedStatement prepare = connect.prepareStatement(sql);
-        prepare.setString(1, id);
-        ResultSet rs = prepare.executeQuery();
-        promotion c = new promotion();
-        if (rs.next()) {
-            promotion p = new promotion(
-                    rs.getString("id"),
-                    rs.getInt("discount"),
-                    rs.getDate("a"),
-                    rs.getDate("2")
-            );
-            return p;
-        };
-        return c;
     }
 
     //    Set spinner

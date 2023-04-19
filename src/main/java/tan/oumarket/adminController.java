@@ -269,9 +269,10 @@ public class adminController implements Initializable {
     private ResultSet result;
     CheckText ch = new CheckText();
 
-    public void switchForm(ActionEvent event) {
+       public void switchForm(ActionEvent event) {
 
         if (event.getSource() == product_btn) {
+
             productFD_form.setVisible(true);
             branchFD_form.setVisible(false);
             employeeFD_form.setVisible(false);
@@ -283,6 +284,7 @@ public class adminController implements Initializable {
             promosion_btn.setStyle("-fx-background-color: transparent; -fx-border-width: 1px; -fx-text-fill: #000;");
 
         } else if (event.getSource() == branch_btn) {
+
             productFD_form.setVisible(false);
             branchFD_form.setVisible(true);
             employeeFD_form.setVisible(false);
@@ -294,6 +296,7 @@ public class adminController implements Initializable {
             promosion_btn.setStyle("-fx-background-color: transparent; -fx-border-width: 1px; -fx-text-fill: #000;");
 
         } else if (event.getSource() == employee_btn) {
+
             productFD_form.setVisible(false);
             branchFD_form.setVisible(false);
             employeeFD_form.setVisible(true);
@@ -305,6 +308,7 @@ public class adminController implements Initializable {
             promosion_btn.setStyle("-fx-background-color: transparent; -fx-border-width: 1px; -fx-text-fill: #000;");
 
         } else if (event.getSource() == promosion_btn) {
+
             productFD_form.setVisible(false);
             branchFD_form.setVisible(false);
             employeeFD_form.setVisible(false);
@@ -462,34 +466,44 @@ public class adminController implements Initializable {
 
     public void addProduct(ActionEvent evt) throws SQLException {
         String km = "";
+        try {
+
         if (ch.checkEmpty(txtproductName.getText()) || ch.checkEmpty(txtproductStatus.getText())
-                || ch.checkEmpty(productType.getSelectionModel().getSelectedIndex()) || ch.checkEmpty(txtproductprice.getText())
+                || ch.checkEmpty(productType.getSelectionModel().getSelectedIndex()) 
+                || ch.checkEmpty(txtproductprice.getText())
                 || ch.checkEmpty(txtBarcode.getText()) || ch.checkBarcode(txtBarcode.getText())
                 || ch.checkEmpty(ch.removeExtraSpaces(txtproductName.getText()))
                 || ch.containsSpecialCharacter(txtproductStatus.getText())
                 || ch.containsSpecialCharacter(txtproductprice.getText())
                 || ch.containsSpecialCharacter(txtBarcode.getText())
-                || ch.checkValue(Integer.parseInt(txtproductprice.getText()), 0)) {
+                || ch.checkValue(Integer.parseInt(txtproductprice.getText()), 0)
+                 ) {
             return;
         }
-        if (cbPromotion.getSelectionModel().getSelectedIndex() < 0) {
-            km = null;
-        } else {
-            km = cbPromotion.getSelectionModel().getSelectedItem().getId();
-        }
-        if (checkNameProduct(txtproductName.getText())) {
-            Info.infoBox("erro name Product", "Error Message", "2");
-        } else {
-            product p = new product(txtproductName.getText(),
-                    productType.getSelectionModel().getSelectedItem(),
-                    Integer.parseInt(txtproductprice.getText()),
-                    Integer.parseInt(txtproductStatus.getText()),
-                    km, txtBarcode.getText());
-            if (product.addProduct(p)) {
-                this.loadProduct(null);
-                Info.infoBox("successfully add", "Message", "1");
+       
+            if (cbPromotion.getSelectionModel().getSelectedIndex() < 0) {
+                km = null;
+            } else {
+                km = cbPromotion.getSelectionModel().getSelectedItem().getId();
             }
+            if (checkNameProduct(txtproductName.getText())) {
+                Info.infoBox("erro name Product", "Error Message", "2");
+            } else {
+                product p = new product(txtproductName.getText(),
+                        productType.getSelectionModel().getSelectedItem(),
+                        Integer.parseInt(txtproductprice.getText()),
+                        Integer.parseInt(txtproductStatus.getText()),
+                        km, txtBarcode.getText());
+                if (product.addProduct(p)) {
+                    this.loadProduct(null);
+                    Info.infoBox("successfully add", "Message", "1");
+                }
+            }
+        } catch (NumberFormatException e) {
+            Info.infoBox("wrong format", "CUSTOMER'S NAME", "-1");
+            
         }
+       
     }
 
     public void deleteProduct(ActionEvent evt) throws SQLException {

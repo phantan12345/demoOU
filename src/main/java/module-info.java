@@ -8,4 +8,6 @@ module tan.oumarket {
     exports tan.oumarket;
     exports tan.pojo;
     exports tan.services;
+        exports setting;
+
 }

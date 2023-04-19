@@ -1,7 +1,3 @@
-/*
- * Click nbfs://nbhost/SystemFileSystem/Templates/Licenses/license-default.txt to change this license
- * Click nbfs://nbhost/SystemFileSystem/Templates/Classes/Class.java to edit this template
- */
 package tan.services;
 
 /**
@@ -127,9 +123,7 @@ public class ProductServices {
                         rs.getInt("price"),
                         rs.getInt("status")
                 );
-                if (rs.getString("idPr") == null) {
-                    p.setIdKM(rs.getString("idPr"));
-                }
+                p.setIdKM(rs.getString("idPr"));
                 return p;
             };
             return c;

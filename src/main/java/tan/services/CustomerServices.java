@@ -22,12 +22,13 @@ import tan.pojo.product;
  * @author admin
  */
 public class CustomerServices {
-
+   Info in = new Info();
     public CustomerServices() {
     }
-    Info in = new Info();
+    
 
     public customer getCus(String phone) throws SQLException {
+           Info in = new Info();
         try (Connection conn = JdbcUtils.getConn()) {
             String sql = "SELECT * FROM customer WHERE phoneNumber = ?";
             Connection connect = JdbcUtils.getConn();
@@ -42,10 +43,10 @@ public class CustomerServices {
                         rs.getString("birthDay"),
                         rs.getString("phoneNumber")
                 );
-                in.infoBox("Promotion applied", "Check Member", "1");
+//                in.infoBox("Promotion applied", "Check Member", "1");
                 return p;
             };
-            in.infoBox("Not registered as a member", "Check Member", "");
+//            in.infoBox("Not registered as a member", "Check Member", "");
             return c;
         }
     }
@@ -58,7 +59,7 @@ public class CustomerServices {
             prepare.setString(1, phone);
             ResultSet rs = prepare.executeQuery();
             if (rs.next()) {
-                in.infoBox("Registered phone number", "Check Member", "");
+//                in.infoBox("Registered phone number", "Check Member", "");
                 return true;
 
             };

@@ -80,6 +80,7 @@ public class LoginController implements Initializable {
                 // Cập nhật giá trị cho biến toàn cục
                 singleton.setUserID(e.getId());
                 singleton.setName(e.getName());
+                singleton.setIDbr(e.getIdbr());
                 if (password.getText().length() >= 8) {
                     info.mess();
                     // TO HIDE YOUR LOGIN FORM

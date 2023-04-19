@@ -55,19 +55,19 @@ public class BillController implements Initializable {
     private Label txtBranch;
 
     @FXML
-    private TextField txtCash;
+    private Label txtCash;
 
     @FXML
-    private TextField txtEM;
+    private Label txtEM;
 
     @FXML
-    private TextField txtEN;
+    private Label txtEN;
 
     @FXML
-    private TextField txtTotal;
+    private Label txtTotal;
 
     @FXML
-    private TextField txtbillID;
+    private Label txtbillID;
 
     @FXML
     private AnchorPane main_form;

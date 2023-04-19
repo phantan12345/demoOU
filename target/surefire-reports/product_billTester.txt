@@ -1,0 +1,8 @@
+-------------------------------------------------------------------------------
+Test set: product_billTester
+-------------------------------------------------------------------------------
+Tests run: 1, Failures: 1, Errors: 0, Skipped: 0, Time elapsed: 2.189 s <<< FAILURE! - in product_billTester
+saveProduct_billTester  Time elapsed: 0.281 s  <<< FAILURE!
+org.opentest4j.AssertionFailedError: expected: <2> but was: <1>
+	at product_billTester.saveProduct_billTester(product_billTester.java:71)
+

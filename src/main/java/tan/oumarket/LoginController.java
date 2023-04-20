@@ -81,6 +81,7 @@ public class LoginController implements Initializable {
                 singleton.setUserID(e.getId());
                 singleton.setName(e.getName());
                 singleton.setIDbr(e.getIdbr());
+                singleton.setActive(e.getActive());
                 if (password.getText().length() >= 8) {
                     info.mess();
                     // TO HIDE YOUR LOGIN FORM

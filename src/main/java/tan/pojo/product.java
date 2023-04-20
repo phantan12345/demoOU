@@ -18,11 +18,11 @@ public class product {
     private String name;
     private String type;
     private int price;
-    private int status;
+    private double status;
     private String idKM;
     private String barcode;
     
-     public product( String id,String name,String type,int price,int status){
+     public product( String id,String name,String type,int price,Double status){
      this.id=id;
      this.name=name;
      this.type=type;
@@ -30,7 +30,7 @@ public class product {
      this.status=status;
     }
 
-    public product( String id,String name,String type,int price,int status,String km_id){
+    public product( String id,String name,String type,int price,Double status,String km_id){
         this.id=id;
         this.name=name;
         this.type=type;
@@ -38,7 +38,7 @@ public class product {
         this.status=status;
         this.idKM=km_id;
        }
-       public product( String name,String type,int price,int status,String km_id,String bar){
+       public product( String name,String type,int price,Double status,String km_id,String bar){
         this.id=id;
         this.name=name;
         this.type=type;
@@ -48,7 +48,7 @@ public class product {
         this.barcode=bar;
        }
     
-    public product(String id,String barcode, String name, String type, int price, int status) {
+    public product(String id,String barcode, String name, String type, int price, Double status) {
         this.id = id;
         this.name = name;
         this.type = type;
@@ -57,7 +57,7 @@ public class product {
         this.barcode = barcode;
     }
 
-    public product(String id, String name, String type, int price, int status, String idKM, String barcode) {
+    public product(String id, String name, String type, int price, Double status, String idKM, String barcode) {
         this.id = id;
         this.name = name;
         this.type = type;
@@ -130,14 +130,14 @@ public class product {
     /**
      * @return the status
      */
-    public int getStatus() {
+    public double getStatus() {
         return status;
     }
 
     /**
      * @param status the status to set
      */
-    public void setStatus(int status) {
+    public void setStatus(Double status) {
         this.status = status;
     }
 

@@ -37,7 +37,7 @@ public class branchServices {
 
 
     public branch getBranch(String id) throws SQLException {
-        branch b=new branch();
+        branch b=null;
         String sql="SELECT * FROM branch where id=?";
         Connection connect = JdbcUtils.getConn();
         PreparedStatement prepare = connect.prepareStatement(sql);

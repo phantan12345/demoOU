@@ -113,6 +113,39 @@ public class CheckText {
         }
         return false;
      }
+
+     public  boolean checkValue1(int d1){
+      
+        if(d1>1000){
+            Info.infoBox("too great value", "CUSTOMER'S NAME", "-1");
+            return true;
+        }
+        return false;
+     }
+
+     public boolean checkQuantity(String quantity,String type){
+        try{
+            if(type.equals("KG")){
+                Double.parseDouble(quantity);
+            }else{
+                Integer.parseInt(quantity);
+            }
+        }catch(Exception e){
+            Info.infoBox("wrong value", "Quantity", "-1");
+            return true;
+        }
+        return false;
+     }
+
+     public  boolean checkValue3(int d1,int d2){
+      
+        if(d1<d2){
+            Info.infoBox("wrong value", "CUSTOMER'S NAME", "-1");
+            return true;
+        }
+        return false;
+     }
+
     
 
 }

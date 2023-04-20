@@ -30,6 +30,7 @@ public class BillServices {
         //       prepare.setString(4, null);
         prepare.setString(4, singleton.getUserID());
         prepare.setString(5, id);
+
         prepare.executeUpdate();
     }
 }

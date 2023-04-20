@@ -268,7 +268,7 @@ public class adminController implements Initializable {
     private Statement statement;
     private ResultSet result;
     CheckText ch = new CheckText();
-
+    Info in= new Info();
        public void switchForm(ActionEvent event) {
 
         if (event.getSource() == product_btn) {
@@ -477,6 +477,7 @@ public class adminController implements Initializable {
                 || ch.containsSpecialCharacter(txtproductprice.getText())
                 || ch.containsSpecialCharacter(txtBarcode.getText())
                 || ch.checkValue(Integer.parseInt(txtproductprice.getText()), 0)
+                || ch.checkValue1(Integer.parseInt(txtproductStatus.getText()))
                  ) {
             return;
         }
@@ -492,7 +493,7 @@ public class adminController implements Initializable {
                 product p = new product(txtproductName.getText(),
                         productType.getSelectionModel().getSelectedItem(),
                         Integer.parseInt(txtproductprice.getText()),
-                        Integer.parseInt(txtproductStatus.getText()),
+                        Double. parseDouble(txtproductStatus.getText()),
                         km, txtBarcode.getText());
                 if (product.addProduct(p)) {
                     this.loadProduct(null);
@@ -507,6 +508,7 @@ public class adminController implements Initializable {
     }
 
     public void deleteProduct(ActionEvent evt) throws SQLException {
+        in.conFir();
         String id = productFD_tableView.getSelectionModel().getSelectedItem().getId();
         String name = productFD_tableView.getSelectionModel().getSelectedItem().getName();
         System.out.print(id);
@@ -537,7 +539,7 @@ public class adminController implements Initializable {
             product p = new product(productFD_tableView.getSelectionModel().getSelectedItem().getId(),
                     txtproductName.getText(),
                     productType.getSelectionModel().getSelectedItem(),
-                    Integer.parseInt(txtproductprice.getText()), Integer.parseInt(txtproductStatus.getText()), km);
+                    Integer.parseInt(txtproductprice.getText()),  Double. parseDouble(txtproductStatus.getText()), km);
 
             if (product.updateProduct(p)) {
                 this.loadProduct(null);
@@ -598,7 +600,7 @@ public class adminController implements Initializable {
 
     }
 
-    private String[] categories = {"Meals", "Drinks"};
+    private String[] categories = {"Kg", "Chai","Lon"};
 
     public void availableFDType() {
         List<String> listCat = new ArrayList<>();
@@ -637,6 +639,7 @@ public class adminController implements Initializable {
     }
 
     public void deleteBranch(ActionEvent evt) throws SQLException {
+        in.conFir();
         if (employee.checkData((branchFD_tableView.getSelectionModel().getSelectedItem()).getId()) ||
         branch.deleteBranch((branchFD_tableView.getSelectionModel().getSelectedItem()).getId()) ) {
             this.loadBranch(null);
@@ -700,6 +703,7 @@ public class adminController implements Initializable {
     }
 
     public void deleteEmployee(ActionEvent evt) throws SQLException {
+        in.conFir();
         try {
             employee.deleteEmployee((employeeFD_tableview.getSelectionModel().getSelectedItem()).getId());
         } catch (Exception exception) {

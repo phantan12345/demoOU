@@ -37,7 +37,7 @@ public class employeeServices {
                         rs.getString("idBr"),
                         rs.getInt("Active"));
                 ds.add(b);
-
+                
                 b.setNamebr(branch.getBranch(b.getIdbr()).getAddress());
 
             }

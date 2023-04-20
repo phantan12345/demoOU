@@ -1,0 +1,12 @@
+-------------------------------------------------------------------------------
+Test set: CustomerTester
+-------------------------------------------------------------------------------
+Tests run: 4, Failures: 2, Errors: 0, Skipped: 0, Time elapsed: 0.535 s <<< FAILURE! - in CustomerTester
+testGetCus1  Time elapsed: 0.066 s  <<< FAILURE!
+org.opentest4j.AssertionFailedError: expected: <1110000> but was: <null>
+	at CustomerTester.testGetCus1(CustomerTester.java:78)
+
+testUniquePhone  Time elapsed: 0.021 s  <<< FAILURE!
+org.opentest4j.AssertionFailedError: expected: <16> but was: <11>
+	at CustomerTester.testUniquePhone(CustomerTester.java:93)
+

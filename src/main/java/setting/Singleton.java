@@ -15,6 +15,7 @@ public class Singleton {
     private String name ;
     private int cash;
     private bill b;
+    private int active;
     private ObservableList<product_bill> pdsList=FXCollections.observableArrayList(); 
     private String IDbr;
     
@@ -107,6 +108,20 @@ public class Singleton {
      */
     public void setIDbr(String IDbr) {
         this.IDbr = IDbr;
+    }
+
+    /**
+     * @return the active
+     */
+    public int getActive() {
+        return active;
+    }
+
+    /**
+     * @param active the active to set
+     */
+    public void setActive(int active) {
+        this.active = active;
     }
 
     /**

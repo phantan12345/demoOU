@@ -1,0 +1,8 @@
+-------------------------------------------------------------------------------
+Test set: BranchTester
+-------------------------------------------------------------------------------
+Tests run: 1, Failures: 0, Errors: 1, Skipped: 0, Time elapsed: 0.395 s <<< FAILURE! - in BranchTester
+checkUpdateBranch  Time elapsed: 0.05 s  <<< ERROR!
+java.lang.NullPointerException: Cannot invoke "tan.pojo.branch.setName(String)" because "br" is null
+	at BranchTester.checkUpdateBranch(BranchTester.java:78)
+

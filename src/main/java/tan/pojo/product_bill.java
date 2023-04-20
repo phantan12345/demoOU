@@ -16,7 +16,7 @@ public class product_bill {
     private String name;
     private String type;
     private int price;
-    private int amount;
+    private double amount;
     private int proPrice;
     private String idProduct;
     private String idBill;
@@ -24,7 +24,7 @@ public class product_bill {
         id = UUID.randomUUID().toString();
     }
 
-    public product_bill( String name, String type, int price, int amount) {
+    public product_bill( String name, String type, int price, double amount) {
         this.name = name;
         this.type = type;
         this.price = price;
@@ -90,14 +90,14 @@ public class product_bill {
     /**
      * @return the amount
      */
-    public int getAmount() {
+    public double getAmount() {
         return amount;
     }
 
     /**
      * @param amount the amount to set
      */
-    public void setAmount(int amount) {
+    public void setAmount(Double amount) {
         this.amount = amount;
     }
 

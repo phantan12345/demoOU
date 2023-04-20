@@ -81,6 +81,7 @@ public class BillController implements Initializable {
         int cash = singleton.getB().getCash();
         int em = cash - total;
         txtBranch.setText(b.getBranch(singleton.getIDbr()).getAddress());
+        System.out.println(b.getBranch(singleton.getIDbr()).getAddress());
         txtEN.setText(singleton.getName());
         txtTotal.setText(decimalFormat.format(total));
         txtbillID.setText(singleton.getB().getId());

@@ -23,7 +23,7 @@ public class Product_billServices {
         PreparedStatement prepare = connect.prepareStatement(sql);
         for(product_bill pb:dspb){
                     prepare.setString(1, pb.getId());
-                    prepare.setInt(2, pb.getAmount());
+                    prepare.setDouble(2, pb.getAmount());
                     prepare.setInt(3, pb.getProPrice());
                     prepare.setString(4, pb.getIdProduct());
                     prepare.setString(5, pb.getIdBill());

@@ -42,8 +42,6 @@ import javafx.scene.control.ButtonType;
 import javafx.scene.control.ComboBox;
 import javafx.scene.control.DatePicker;
 import javafx.scene.control.Label;
-import javafx.scene.control.Spinner;
-import javafx.scene.control.SpinnerValueFactory;
 import javafx.scene.control.TableColumn;
 import javafx.scene.control.TableView;
 import javafx.scene.control.TextField;
@@ -149,8 +147,7 @@ public class employeeController implements Initializable {
     @FXML
     private ComboBox<?> order_productName;
 
-    @FXML
-    private Spinner<Integer> order_quantity;
+
 
     @FXML
     private Button order_addBtn;
@@ -191,8 +188,7 @@ public class employeeController implements Initializable {
     @FXML
     private TableColumn<?, ?> col_promotionPrice;
 
-    @FXML
-    private Spinner<Integer> orderQuantity;
+   
 
     @FXML
     private TextField txtFundsTotal;
@@ -233,6 +229,9 @@ public class employeeController implements Initializable {
     @FXML
     private TextField txtCash;
 
+    @FXML
+    private TextField txtQuantity;
+
     private Connection connect;
     private PreparedStatement prepare;
     private Statement statement;
@@ -256,14 +255,24 @@ public class employeeController implements Initializable {
     Singleton singleton = Singleton.getInstance();
 
     public void addBill() throws SQLException {
+        String Quantity=checkText.removeExtraSpaces(txtQuantity.getText());
         String code = txtProductID.getText();
         ProductServices bProductServices = new ProductServices();
-        if (checkText.checkEmpty(code) || bProductServices.checkBarcode(code)) {
+        if (checkText.checkEmpty(code) || bProductServices.checkBarcode(code)||checkText.checkEmpty(Quantity)) {
             return;
         }
         pds = new ProductServices();
         product p = pds.getProduct(txtProductID.getText());
-        pb = new product_bill(p.getName(), p.getType(), p.getPrice(), orderQuantity.getValue());
+        if(checkText.checkQuantity(Quantity, p.getType())){
+            return;
+        }
+        Double quan=Double.parseDouble(Quantity);
+        if(p.getStatus()<quan){
+            info.infoBox("Wrong", "Quantity", "-1");
+            return;
+        }
+
+        pb = new product_bill(p.getName(), p.getType(), p.getPrice(), quan);
         pb.setIdProduct(p.getId());
         promotion pro = pS.getPromotion(p.getIdKM());
         System.out.println( pS.getPromotion(p.getIdKM()).getDiscount());
@@ -274,22 +283,23 @@ public class employeeController implements Initializable {
         if (pS.checkActive(pro)) {
             pro.setDiscount(0);
         }
-        if (updateAmount(p.getId(), pro.getDiscount())) {
+        if (updateAmount(p.getId(), pro.getDiscount(),quan) ) {
             dspb.add(pb);
         }
         System.out.print(pro.getAative());
         System.out.print(pro.getDiscount());
-        int price = Math.round((pb.getPrice() - pb.getPrice() * pro.getDiscount() / 100) * pb.getAmount());
+        int price = (int) Math.round((pb.getPrice() - pb.getPrice() * pro.getDiscount() / 100) * pb.getAmount());
         pb.setProPrice(price);
         this.tbv_Product.refresh();
         loadTableView();
-        orderQuantity.getValueFactory().setValue(1);
+        txtQuantity.setText("");
         txtProductID.setText("");
         fundsTotal();
         info.mess();
     }
 
     public void deleteBill() throws SQLException {
+        info.conFir();
         product_bill pb = tbv_Product.getSelectionModel().getSelectedItem();
         dspb.remove(pb);
         loadTableView();
@@ -307,7 +317,7 @@ public class employeeController implements Initializable {
         txtPhone.setText("");
         txtProductID.setText("");
         txtCash.setText("");
-        orderQuantity.getValueFactory().setValue(1);
+        txtQuantity.setText("");
         dspb.clear();
         tbv_Product.getItems().clear();
         ft = 0;
@@ -334,8 +344,9 @@ public class employeeController implements Initializable {
         }
         b.setCash(Integer.parseInt(txtCash.getText()));
         singleton.setB(b);
-//        singleton.setPdsList(dspb);
+       singleton.setPdsList(dspb);
         pdServices.saveProduct_bill(dspb);
+        
         pds.updateAmount(dspb);
         Clear();
         Parent root = FXMLLoader.load(getClass().getResource("bill.fxml"));
@@ -402,12 +413,12 @@ public class employeeController implements Initializable {
         loadTableCus();
     }
 
-    public boolean updateAmount(String kw, int discount) throws SQLException {
+    public boolean updateAmount(String kw, int discount,double quantity) throws SQLException {
         if (dspb.size() > 0) {
             for (product_bill p : dspb) {
                 if (p.getIdProduct().equals(kw)) {
-                    p.setAmount(orderQuantity.getValue() + p.getAmount());
-                    p.setProPrice((p.getPrice() - p.getPrice() * discount / 100) * p.getAmount());
+                    p.setAmount(quantity + p.getAmount());
+                    p.setProPrice((int) ((p.getPrice() - p.getPrice() * discount / 100) * p.getAmount()));
                     pb.setAmount(p.getAmount());
                     return false;
                 }
@@ -444,18 +455,7 @@ public class employeeController implements Initializable {
         }
     }
 
-    //    Set spinner
-    private SpinnerValueFactory<Integer> spinn;
 
-    public void orderSpinner() {
-        spinn = new SpinnerValueFactory.IntegerSpinnerValueFactory(1, 50, 1);
-        orderQuantity.setValueFactory(spinn);
-    }
-    private int qty;
-
-    public void orderQuantity() {
-        qty = orderQuantity.getValue();
-    }
 
     public void close() {
         System.exit(0);
@@ -511,7 +511,6 @@ public class employeeController implements Initializable {
     public void initialize(URL location, ResourceBundle resources) {
         Singleton singleton = Singleton.getInstance();
         username.setText(" " + singleton.getName());
-        orderSpinner();
         loadCol();
         loadColCus();
         try {

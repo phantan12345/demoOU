@@ -133,7 +133,7 @@ public class BillController implements Initializable {
         }
         ObservableList<product_bill> pdsList = FXCollections.observableArrayList();
         singleton.setPdsList(pdsList);
-        autoClose();
+//        autoClose();
     }
 
 }
